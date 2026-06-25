@@ -1,0 +1,2069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tanzania Safari Vehicle & Parts Proposal Management Portal</title>
+<!-- Bootstrap 5.3 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!-- AOS -->
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<!-- DataTables -->
+<link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
+
+<style>
+:root {
+  --navy: #003366;
+  --navy-dark: #002244;
+  --navy-light: #004499;
+  --green: #007B5E;
+  --green-light: #009970;
+  --gold: #F4B400;
+  --gold-light: #FFCC33;
+  --bg: #F0F2F5;
+  --white: #FFFFFF;
+  --text: #212529;
+  --muted: #6C757D;
+  --border: #DEE2E6;
+  --card-shadow: 0 4px 20px rgba(0,51,102,0.10);
+  --card-shadow-hover: 0 8px 32px rgba(0,51,102,0.18);
+}
+
+* { box-sizing: border-box; }
+body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: var(--navy); border-radius: 3px; }
+
+/* ── NAVBAR ── */
+.main-navbar {
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, #004080 100%);
+  padding: 0; position: sticky; top: 0; z-index: 1050;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+}
+.navbar-brand { display: flex; align-items: center; gap: 12px; padding: 14px 0; }
+.brand-logo {
+  width: 46px; height: 46px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; font-weight: 900; color: var(--navy); flex-shrink: 0;
+}
+.brand-text { line-height: 1.15; }
+.brand-text .brand-main { font-size: 0.85rem; font-weight: 700; color: #fff; display: block; white-space: nowrap; }
+.brand-text .brand-sub { font-size: 0.65rem; color: rgba(255,255,255,0.6); display: block; }
+.main-navbar .nav-link {
+  color: rgba(255,255,255,0.85) !important; font-size: 0.78rem; font-weight: 500;
+  padding: 8px 12px !important; border-radius: 6px; transition: all 0.2s; white-space: nowrap;
+}
+.main-navbar .nav-link:hover { color: var(--gold) !important; background: rgba(255,255,255,0.08); }
+.btn-login {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--navy) !important; font-weight: 700 !important; border-radius: 20px !important;
+  padding: 6px 18px !important;
+}
+.btn-login:hover { background: var(--gold-light); box-shadow: 0 2px 10px rgba(244,180,0,0.4); }
+.navbar-toggler { border-color: rgba(255,255,255,0.3); }
+.navbar-toggler-icon { filter: invert(1); }
+
+/* ── HERO ── */
+.hero-section {
+  position: relative; min-height: 88vh; display: flex; align-items: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(0,20,50,0.97) 0%, rgba(0,51,102,0.92) 45%, rgba(0,80,60,0.85) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23001a33' width='800' height='600'/%3E%3Ccircle cx='200' cy='300' r='120' fill='none' stroke='%23F4B400' stroke-width='1' opacity='0.15'/%3E%3Ccircle cx='600' cy='200' r='80' fill='none' stroke='%23007B5E' stroke-width='1' opacity='0.2'/%3E%3Cpath d='M50 500 Q200 380 350 420 T650 350' stroke='%23F4B400' stroke-width='1' fill='none' opacity='0.12'/%3E%3C/svg%3E") center/cover;
+}
+.hero-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1' fill='rgba(244,180,0,0.06)'/%3E%3C/svg%3E");
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(244,180,0,0.15); border: 1px solid rgba(244,180,0,0.35);
+  color: var(--gold); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; padding: 6px 16px; border-radius: 30px; margin-bottom: 20px;
+}
+.hero-title {
+  font-size: clamp(1.5rem, 3.2vw, 2.6rem); font-weight: 800; color: #fff; line-height: 1.12;
+  margin-bottom: 20px;
+}
+.hero-title .accent { color: var(--gold); }
+.hero-sub { font-size: 1rem; color: rgba(255,255,255,0.72); line-height: 1.75; max-width: 560px; margin-bottom: 36px; }
+.btn-hero-primary {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy);
+  font-weight: 700; border: none; padding: 14px 28px; border-radius: 8px;
+  font-size: 0.88rem; transition: all 0.25s;
+}
+.btn-hero-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(244,180,0,0.4); color: var(--navy); }
+.btn-hero-outline {
+  background: transparent; color: #fff; font-weight: 600;
+  border: 2px solid rgba(255,255,255,0.4); padding: 12px 28px; border-radius: 8px;
+  font-size: 0.88rem; transition: all 0.25s;
+}
+.btn-hero-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+/* Hero stats */
+.hero-stat-card {
+  background: rgba(255,255,255,0.07); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 18px 22px; text-align: center;
+}
+.hero-stat-card .stat-num { font-size: 2rem; font-weight: 800; color: var(--gold); line-height: 1; }
+.hero-stat-card .stat-lbl { font-size: 0.7rem; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+/* Hero floating graphic */
+.hero-vehicle-graphic {
+  position: relative; display: flex; align-items: center; justify-content: center;
+}
+.truck-svg-wrap {
+  background: rgba(255,255,255,0.05); backdrop-filter: blur(10px);
+  border: 1px solid rgba(244,180,0,0.2); border-radius: 20px; padding: 30px;
+  animation: floatY 4s ease-in-out infinite;
+}
+@keyframes floatY { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-14px); } }
+
+/* ── SECTION HEADERS ── */
+.section-wrap { padding: 80px 0; }
+.sec-tag { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
+.sec-title { font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 800; color: var(--navy); margin-bottom: 10px; }
+.sec-title span { color: var(--gold); }
+.sec-lead { font-size: 0.92rem; color: var(--muted); max-width: 560px; line-height: 1.7; }
+
+/* ── CARDS ── */
+.glass-card {
+  background: var(--white); border-radius: 16px;
+  box-shadow: var(--card-shadow); border: 1px solid rgba(0,51,102,0.06);
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+.glass-card:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-3px); }
+
+/* ── KPI CARDS ── */
+.kpi-card {
+  border-radius: 16px; padding: 24px; color: #fff; position: relative; overflow: hidden;
+  box-shadow: var(--card-shadow);
+}
+.kpi-card::after {
+  content: ''; position: absolute; right: -20px; top: -20px;
+  width: 90px; height: 90px; border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+}
+.kpi-card .kpi-icon { font-size: 1.8rem; opacity: 0.85; margin-bottom: 12px; }
+.kpi-card .kpi-val { font-size: 2.4rem; font-weight: 800; line-height: 1; }
+.kpi-card .kpi-lbl { font-size: 0.72rem; opacity: 0.8; margin-top: 4px; font-weight: 500; letter-spacing: 0.04em; }
+.kpi-card .kpi-trend { font-size: 0.73rem; margin-top: 8px; opacity: 0.85; }
+.kpi-1 { background: linear-gradient(135deg, #003366, #004499); }
+.kpi-2 { background: linear-gradient(135deg, #007B5E, #009970); }
+.kpi-3 { background: linear-gradient(135deg, #D97706, #F59E0B); }
+.kpi-4 { background: linear-gradient(135deg, #0891B2, #06B6D4); }
+.kpi-5 { background: linear-gradient(135deg, #DC2626, #EF4444); }
+.kpi-6 { background: linear-gradient(135deg, #065F46, #059669); }
+.kpi-7 { background: linear-gradient(135deg, #7C3AED, #8B5CF6); }
+.kpi-8 { background: linear-gradient(135deg, #B45309, #D97706); }
+
+/* ── STATUS BADGES ── */
+.badge-draft { background: #6B7280; color: #fff; }
+.badge-submitted { background: #1D4ED8; color: #fff; }
+.badge-review { background: #D97706; color: #fff; }
+.badge-approval { background: #7C3AED; color: #fff; }
+.badge-proposal { background: #0891B2; color: #fff; }
+.badge-client-review { background: #CA8A04; color: #fff; }
+.badge-goahead { background: #059669; color: #fff; }
+.badge-rejected { background: #DC2626; color: #fff; }
+.badge-converted { background: #065F46; color: #fff; }
+
+.status-badge {
+  font-size: 0.67rem; font-weight: 600; padding: 4px 10px; border-radius: 20px;
+  letter-spacing: 0.03em; white-space: nowrap;
+}
+
+/* ── FORM ── */
+.form-section-title {
+  font-size: 0.95rem; font-weight: 700; color: var(--navy);
+  padding: 12px 16px; background: linear-gradient(90deg, rgba(0,51,102,0.06), transparent);
+  border-left: 4px solid var(--gold); border-radius: 0 8px 8px 0; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.form-label { font-size: 0.78rem; font-weight: 600; color: #374151; margin-bottom: 5px; }
+.form-control, .form-select {
+  border: 1px solid #D1D5DB; border-radius: 8px; font-size: 0.82rem;
+  padding: 10px 14px; transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: 'Poppins', sans-serif;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--navy); box-shadow: 0 0 0 3px rgba(0,51,102,0.1);
+}
+.required-mark { color: var(--gold); }
+
+/* ── PRODUCT GRID ── */
+.product-grid-wrap { overflow-x: auto; }
+.product-grid { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 1100px; }
+.product-grid thead th {
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  color: #fff; font-size: 0.72rem; font-weight: 600; padding: 12px 10px;
+  border: none; white-space: nowrap; letter-spacing: 0.03em;
+}
+.product-grid thead th:first-child { border-radius: 10px 0 0 0; }
+.product-grid thead th:last-child { border-radius: 0 10px 0 0; }
+.product-grid tbody tr { background: #fff; transition: background 0.15s; }
+.product-grid tbody tr:nth-child(even) { background: #F9FAFB; }
+.product-grid tbody tr:hover { background: rgba(0,51,102,0.04); }
+.product-grid tbody td { padding: 8px 6px; border-bottom: 1px solid #F0F2F5; vertical-align: middle; }
+.product-grid tbody td input, .product-grid tbody td select {
+  font-size: 0.76rem; padding: 6px 8px; border: 1px solid #E5E7EB; border-radius: 6px;
+  width: 100%; background: transparent; font-family: 'Poppins', sans-serif;
+}
+.product-grid tbody td input:focus, .product-grid tbody td select:focus {
+  outline: none; border-color: var(--navy); background: #fff;
+}
+.btn-del-row { background: none; border: none; color: #DC2626; padding: 4px 6px; cursor: pointer; font-size: 0.9rem; }
+.btn-del-row:hover { color: #991B1B; }
+
+/* ── DROPZONE ── */
+.dropzone-area {
+  border: 2px dashed #D1D5DB; border-radius: 14px; padding: 48px 24px;
+  text-align: center; transition: all 0.25s; cursor: pointer; background: #FAFAFA;
+}
+.dropzone-area:hover, .dropzone-area.dragover {
+  border-color: var(--navy); background: rgba(0,51,102,0.04);
+}
+.dropzone-icon { font-size: 2.4rem; color: var(--navy); margin-bottom: 12px; opacity: 0.6; }
+.dropzone-area p { font-size: 0.82rem; color: var(--muted); margin: 0; }
+.uploaded-files { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+.file-chip {
+  background: rgba(0,51,102,0.08); border: 1px solid rgba(0,51,102,0.15);
+  border-radius: 20px; padding: 4px 12px; font-size: 0.72rem; color: var(--navy);
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* ── WORKFLOW ── */
+.workflow-wrap {
+  background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+  border-radius: 20px; padding: 48px; overflow: hidden; position: relative;
+}
+.workflow-wrap::before {
+  content: ''; position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E");
+}
+.workflow-title { font-family:'Poppins',sans-serif; font-size:1.3rem; font-weight:700; color:#fff; text-align:center; margin-bottom:40px; position:relative; z-index:1; }
+.workflow-steps { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:0; position:relative; z-index:1; }
+.wf-step { display:flex; flex-direction:column; align-items:center; text-align:center; }
+.wf-circle {
+  width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem; font-weight:700; border:2px solid rgba(255,255,255,0.3);
+  background:rgba(255,255,255,0.08); transition:all 0.3s; cursor:default;
+  animation: pulseWF 3s ease-in-out infinite;
+}
+.wf-circle.active { background:var(--gold); border-color:var(--gold); color:var(--navy); animation:none; }
+.wf-circle.done { background:var(--green); border-color:var(--green); color:#fff; animation:none; }
+@keyframes pulseWF { 0%,100%{ box-shadow:0 0 0 0 rgba(244,180,0,0); } 50%{ box-shadow:0 0 0 6px rgba(244,180,0,0.15); } }
+.wf-label { font-size:0.65rem; color:rgba(255,255,255,0.75); margin-top:8px; max-width:70px; line-height:1.35; font-weight:500; }
+.wf-arrow { color:rgba(244,180,0,0.5); font-size:1rem; padding:0 4px; margin-bottom:28px; }
+
+/* ── TABS ── */
+.portal-tabs .nav-link {
+  color: var(--muted); font-size: 0.8rem; font-weight: 600; border: none;
+  padding: 12px 20px; border-radius: 10px 10px 0 0; transition: all 0.2s;
+  border-bottom: 3px solid transparent;
+}
+.portal-tabs .nav-link:hover { color: var(--navy); background: rgba(0,51,102,0.05); }
+.portal-tabs .nav-link.active {
+  color: var(--navy); background: var(--white); border-bottom-color: var(--gold);
+  box-shadow: 0 -2px 10px rgba(0,51,102,0.06);
+}
+.tab-panel { background: var(--white); border-radius: 0 16px 16px 16px; box-shadow: var(--card-shadow); padding: 32px; }
+
+/* ── TIMELINE ── */
+.timeline-wrap { position: relative; }
+.timeline-wrap::before {
+  content: ''; position: absolute; left: 26px; top: 0; bottom: 0;
+  width: 2px; background: linear-gradient(180deg, var(--navy), var(--green), var(--gold));
+  border-radius: 2px;
+}
+.tl-item { display: flex; gap: 20px; padding: 0 0 28px 0; position: relative; }
+.tl-dot {
+  width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0; z-index: 1;
+  display: flex; align-items: center; justify-content: center; font-size: 1rem;
+  border: 3px solid var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+}
+.tl-card {
+  flex: 1; background: var(--white); border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,51,102,0.08); padding: 16px 20px;
+  border-left: 4px solid transparent;
+}
+.tl-card.submitted { border-left-color: #1D4ED8; }
+.tl-card.review { border-left-color: #D97706; }
+.tl-card.discussion { border-left-color: #7C3AED; }
+.tl-card.approved { border-left-color: #059669; }
+.tl-card.rejected { border-left-color: #DC2626; }
+.tl-date { font-size: 0.72rem; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+.tl-title { font-size: 0.9rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.tl-note { font-size: 0.8rem; color: #374151; line-height: 1.6; margin-bottom: 8px; }
+.tl-next { font-size: 0.72rem; color: var(--green); font-weight: 600; }
+.tl-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.tl-chip {
+  font-size: 0.68rem; padding: 3px 9px; border-radius: 20px; font-weight: 500;
+  background: rgba(0,51,102,0.07); color: var(--navy);
+}
+
+/* ── CHARTS ── */
+.chart-card { background: var(--white); border-radius: 16px; box-shadow: var(--card-shadow); padding: 24px; }
+.chart-title { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.chart-sub { font-size: 0.72rem; color: var(--muted); margin-bottom: 18px; }
+
+/* ── NOTIFICATION PANEL ── */
+.notif-panel {
+  position: fixed; right: -340px; top: 0; bottom: 0; width: 320px; z-index: 2000;
+  background: var(--white); box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+  transition: right 0.3s ease; padding: 0; overflow-y: auto;
+}
+.notif-panel.open { right: 0; }
+.notif-header {
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  padding: 20px; color: #fff; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 1;
+}
+.notif-header h6 { margin: 0; font-weight: 700; font-size: 0.92rem; }
+.notif-close { background: none; border: none; color: #fff; font-size: 1.1rem; cursor: pointer; }
+.notif-item {
+  padding: 14px 18px; border-bottom: 1px solid #F0F2F5; transition: background 0.15s;
+}
+.notif-item:hover { background: #F9FAFB; }
+.notif-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+.notif-text { font-size: 0.78rem; color: var(--text); font-weight: 500; line-height: 1.45; }
+.notif-time { font-size: 0.68rem; color: var(--muted); margin-top: 3px; }
+
+/* ── AUTOMATION ── */
+.auto-flow { display: flex; flex-direction: column; gap: 0; position: relative; max-width: 600px; margin: 0 auto; }
+.auto-flow::before {
+  content: ''; position: absolute; left: 27px; top: 28px; bottom: 28px;
+  width: 2px; background: linear-gradient(180deg, var(--gold), var(--green));
+}
+.auto-step { display: flex; align-items: flex-start; gap: 20px; padding: 12px 0; }
+.auto-dot {
+  width: 56px; height: 56px; border-radius: 50%; border: 2px solid;
+  display: flex; align-items: center; justify-content: center; font-size: 1rem;
+  flex-shrink: 0; z-index: 1;
+}
+.auto-step:nth-child(odd) .auto-dot { border-color: var(--gold); background: rgba(244,180,0,0.1); color: var(--gold); }
+.auto-step:nth-child(even) .auto-dot { border-color: var(--green); background: rgba(0,123,94,0.1); color: var(--green); }
+.auto-content h5 { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 2px; margin-top: 14px; }
+.auto-content p { font-size: 0.76rem; color: var(--muted); margin: 0; }
+
+/* ── SUBMIT SUCCESS ── */
+.success-box {
+  display: none; background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
+  border: 1px solid #10B981; border-radius: 14px; padding: 28px;
+  text-align: center;
+}
+.success-box.show { display: block; animation: fadeInUp 0.4s ease; }
+@keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.success-enq { font-size: 1.6rem; font-weight: 800; color: var(--navy); }
+
+/* ── DATATABLES OVERRIDES ── */
+.dataTables_wrapper .dataTables_filter input {
+  border: 1px solid #D1D5DB; border-radius: 8px; padding: 6px 12px; font-size: 0.8rem;
+}
+.dataTables_wrapper .dataTables_length select { border: 1px solid #D1D5DB; border-radius: 6px; font-size: 0.8rem; }
+table.dataTable thead th { background: linear-gradient(135deg, var(--navy), var(--navy-light)) !important; color: #fff !important; font-size: 0.72rem !important; border: none !important; }
+table.dataTable tbody tr:hover { background: rgba(0,51,102,0.04) !important; }
+.dt-buttons .btn { background: var(--navy); color: #fff; font-size: 0.75rem; border-radius: 6px; border: none; margin: 2px; padding: 6px 14px; }
+.dt-buttons .btn:hover { background: var(--navy-light); color: #fff; }
+
+/* ── FOOTER ── */
+.main-footer {
+  background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+  color: rgba(255,255,255,0.8); padding: 60px 0 30px;
+}
+.footer-brand { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 12px; }
+.footer-text { font-size: 0.8rem; color: rgba(255,255,255,0.55); line-height: 1.7; }
+.footer-heading { font-size: 0.8rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; }
+.footer-links { list-style: none; padding: 0; }
+.footer-links li { margin-bottom: 8px; }
+.footer-links a { color: rgba(255,255,255,0.6); font-size: 0.78rem; text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--gold); }
+.footer-social a {
+  width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.08);
+  display: inline-flex; align-items: center; justify-content: center; color: #fff;
+  font-size: 0.85rem; margin-right: 6px; transition: all 0.2s; text-decoration: none;
+}
+.footer-social a:hover { background: var(--gold); color: var(--navy); }
+.footer-divider { border-color: rgba(255,255,255,0.1); margin: 28px 0 18px; }
+.footer-bottom { font-size: 0.73rem; color: rgba(255,255,255,0.4); }
+
+/* ── MISC ── */
+.notif-btn {
+  position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+  z-index: 1040; background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  color: #fff; border: none; border-radius: 50%; width: 48px; height: 48px;
+  font-size: 1rem; box-shadow: 0 4px 16px rgba(0,0,0,0.2); cursor: pointer; transition: all 0.2s;
+}
+.notif-btn:hover { background: var(--gold); color: var(--navy); }
+.badge-count {
+  position: absolute; top: -4px; right: -4px; background: var(--gold); color: var(--navy);
+  font-size: 0.6rem; font-weight: 800; width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.section-divider {
+  height: 1px; background: linear-gradient(90deg, transparent, rgba(0,51,102,0.15), transparent);
+  margin: 0;
+}
+.enquiry-badge {
+  background: rgba(0,51,102,0.06); border: 1px solid rgba(0,51,102,0.12);
+  border-radius: 10px; padding: 20px 24px; text-align: center;
+}
+.enquiry-badge .enq-num { font-size: 1.5rem; font-weight: 800; color: var(--navy); }
+.enquiry-badge .enq-lbl { font-size: 0.72rem; color: var(--muted); }
+
+@media (max-width: 768px) {
+  .workflow-steps { gap: 4px; }
+  .wf-label { font-size: 0.58rem; max-width: 55px; }
+  .wf-arrow { display: none; }
+  .portal-tabs { flex-wrap: nowrap; overflow-x: auto; }
+  .hero-section { min-height: auto; padding: 100px 0 60px; }
+}
+
+/* ══════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════ */
+.app-shell { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, var(--navy-dark) 0%, #002a5c 60%, #003d1f 100%);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 1100;
+  box-shadow: 4px 0 24px rgba(0,0,0,0.22);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+.sidebar-collapsed .sidebar { transform: translateX(-260px); }
+
+.sidebar-logo {
+  display: flex; align-items: center; gap: 12px;
+  padding: 22px 20px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.sidebar-logo .brand-logo { width: 40px; height: 40px; font-size: 1.15rem; flex-shrink: 0; }
+.sidebar-logo .sidebar-brand-text { font-size: 0.78rem; font-weight: 700; color: #fff; line-height: 1.35; }
+.sidebar-logo .sidebar-brand-sub { font-size: 0.62rem; color: rgba(255,255,255,0.5); }
+
+.sidebar-section-label {
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35); padding: 18px 20px 6px;
+}
+
+.sidebar-nav { list-style: none; padding: 0 10px; margin: 0; }
+.sidebar-nav li { margin-bottom: 2px; }
+
+.sidebar-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px; border-radius: 10px;
+  color: rgba(255,255,255,0.72); font-size: 0.82rem; font-weight: 500;
+  text-decoration: none; cursor: pointer; transition: all 0.2s;
+  border: none; background: none; width: 100%; text-align: left;
+}
+.sidebar-link:hover {
+  background: rgba(255,255,255,0.08); color: #fff;
+}
+.sidebar-link.active {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--navy); font-weight: 700;
+}
+.sidebar-link.active .sidebar-icon { color: var(--navy); }
+.sidebar-icon {
+  width: 30px; height: 30px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; flex-shrink: 0;
+  background: rgba(255,255,255,0.07);
+  transition: background 0.2s;
+}
+.sidebar-link.active .sidebar-icon { background: rgba(0,0,0,0.12); }
+.sidebar-link-text { flex: 1; }
+.sidebar-badge {
+  font-size: 0.62rem; font-weight: 700; padding: 2px 7px; border-radius: 20px;
+  background: var(--gold); color: var(--navy);
+}
+
+.sidebar-footer {
+  margin-top: auto; padding: 16px 20px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-size: 0.68rem; color: rgba(255,255,255,0.3);
+}
+
+/* Main content shifts right when sidebar is open */
+.main-content-wrap {
+  flex: 1;
+  margin-left: 260px;
+  transition: margin-left 0.3s ease;
+  min-width: 0;
+}
+.sidebar-collapsed .main-content-wrap { margin-left: 0; }
+
+/* Sidebar toggle button */
+.sidebar-toggle-btn {
+  position: fixed; left: 268px; top: 50%;
+  transform: translateY(-50%);
+  z-index: 1200;
+  background: var(--gold); color: var(--navy);
+  border: none; border-radius: 0 8px 8px 0;
+  width: 22px; height: 44px;
+  font-size: 0.7rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+  transition: left 0.3s ease;
+}
+.sidebar-collapsed .sidebar-toggle-btn { left: 8px; border-radius: 8px; width: 36px; height: 36px; font-size: 0.9rem; }
+
+/* ── MENU PAGES ── */
+.menu-page {
+  display: none;
+  min-height: 100vh;
+  background: var(--bg);
+}
+.menu-page.active { display: block; }
+
+.menu-page-header {
+  background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+  color: #fff; padding: 28px 36px;
+  display: flex; align-items: center; gap: 16px;
+}
+.menu-page-header .page-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: rgba(244,180,0,0.18); border: 1.5px solid rgba(244,180,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; color: var(--gold);
+}
+.menu-page-header h2 { font-size: 1.3rem; font-weight: 800; margin: 0 0 3px; }
+.menu-page-header p { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin: 0; }
+
+.menu-page-body { padding: 32px 36px; }
+
+/* ── ACCESS CONTROL PAGE ── */
+.ac-role-card {
+  background: #fff; border-radius: 14px; padding: 20px 24px;
+  box-shadow: var(--card-shadow); border-left: 4px solid var(--navy);
+  display: flex; align-items: center; gap: 16px; margin-bottom: 14px;
+  transition: box-shadow 0.2s;
+}
+.ac-role-card:hover { box-shadow: var(--card-shadow-hover); }
+.ac-role-icon { width: 44px; height: 44px; border-radius: 10px; background: rgba(0,51,102,0.08); display:flex; align-items:center; justify-content:center; font-size:1.1rem; color: var(--navy); flex-shrink:0; }
+.ac-role-name { font-size: 0.9rem; font-weight: 700; color: var(--navy); }
+.ac-role-desc { font-size: 0.74rem; color: var(--muted); }
+.perm-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.perm-chip { font-size: 0.65rem; padding: 3px 9px; border-radius: 20px; font-weight: 600; }
+.perm-yes { background: rgba(5,150,105,0.12); color: #059669; border: 1px solid rgba(5,150,105,0.25); }
+.perm-no  { background: rgba(220,38,38,0.08); color: #DC2626; border: 1px solid rgba(220,38,38,0.2); }
+
+.user-table-wrap { background: #fff; border-radius: 14px; box-shadow: var(--card-shadow); overflow: hidden; }
+.user-table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.user-table-wrap thead th { background: linear-gradient(135deg, var(--navy), var(--navy-light)); color: #fff; padding: 12px 16px; font-weight: 600; font-size: 0.72rem; }
+.user-table-wrap tbody td { padding: 11px 16px; border-bottom: 1px solid #F0F2F5; vertical-align: middle; }
+.user-table-wrap tbody tr:hover { background: rgba(0,51,102,0.03); }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+
+/* ── PRODUCT MASTER PAGE ── */
+.pm-cat-card {
+  background: #fff; border-radius: 14px; padding: 18px 20px;
+  box-shadow: var(--card-shadow); text-align: center;
+  cursor: pointer; transition: all 0.2s; border: 2px solid transparent;
+}
+.pm-cat-card:hover, .pm-cat-card.selected { border-color: var(--gold); box-shadow: var(--card-shadow-hover); }
+.pm-cat-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.pm-cat-name { font-size: 0.8rem; font-weight: 700; color: var(--navy); }
+.pm-cat-count { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+
+/* ── PRICE MASTER PAGE ── */
+.price-tier-card {
+  background: #fff; border-radius: 14px; padding: 22px 24px;
+  box-shadow: var(--card-shadow); border-top: 4px solid;
+}
+.price-tier-card.tier-1 { border-top-color: var(--gold); }
+.price-tier-card.tier-2 { border-top-color: var(--green); }
+.price-tier-card.tier-3 { border-top-color: var(--navy); }
+.price-tier-card.tier-4 { border-top-color: #7C3AED; }
+.tier-name { font-size: 0.95rem; font-weight: 800; color: var(--navy); margin-bottom: 4px; }
+.tier-desc { font-size: 0.74rem; color: var(--muted); margin-bottom: 14px; }
+.tier-discount { font-size: 1.6rem; font-weight: 800; }
+.tier-label { font-size: 0.7rem; color: var(--muted); }
+
+/* ── CUSTOMER MASTER PAGE ── */
+.cust-card {
+  background: #fff; border-radius: 14px; padding: 18px 20px;
+  box-shadow: var(--card-shadow); display: flex; align-items: center; gap: 14px;
+  transition: all 0.2s; border: 1.5px solid transparent;
+}
+.cust-card:hover { border-color: rgba(0,51,102,0.2); box-shadow: var(--card-shadow-hover); }
+.cust-avatar {
+  width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-size: 1rem; font-weight: 800; color: #fff; flex-shrink: 0;
+}
+.cust-name { font-size: 0.84rem; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+.cust-info { font-size: 0.7rem; color: var(--muted); }
+.cust-type-badge { font-size: 0.62rem; padding: 2px 8px; border-radius: 20px; font-weight: 600; margin-top: 4px; display: inline-block; }
+
+/* Toolbar above table */
+.page-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px; margin-bottom: 22px;
+}
+.page-toolbar-title { font-size: 1rem; font-weight: 800; color: var(--navy); }
+.btn-add-new {
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  color: #fff; border: none; border-radius: 8px;
+  padding: 9px 18px; font-size: 0.78rem; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; gap: 7px; transition: all 0.2s;
+}
+.btn-add-new:hover { box-shadow: 0 4px 14px rgba(0,51,102,0.3); transform: translateY(-1px); }
+.search-bar-mini {
+  display: flex; align-items: center; gap: 8px;
+  background: #fff; border: 1px solid #D1D5DB; border-radius: 8px;
+  padding: 7px 12px; font-size: 0.78rem; color: var(--muted);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05); min-width: 200px;
+}
+.search-bar-mini input { border: none; outline: none; font-size: 0.78rem; font-family: 'Poppins', sans-serif; width: 100%; background: transparent; }
+
+@media (max-width: 991px) {
+  .sidebar { transform: translateX(-260px); }
+  .app-shell:not(.sidebar-collapsed) .sidebar { transform: translateX(0); }
+  .main-content-wrap { margin-left: 0 !important; }
+  .sidebar-toggle-btn { left: 8px; border-radius: 8px; width: 36px; height: 36px; font-size: 0.9rem; }
+  .app-shell:not(.sidebar-collapsed) .sidebar-toggle-btn { left: 268px; border-radius: 0 8px 8px 0; width: 22px; height: 44px; font-size: 0.7rem; }
+  .menu-page-body { padding: 20px 16px; }
+  .menu-page-header { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR TOGGLE BUTTON -->
+<button class="sidebar-toggle-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" title="Toggle Sidebar">
+  <i class="fas fa-chevron-left" id="sidebarToggleIcon"></i>
+</button>
+
+<div class="app-shell" id="appShell">
+<!-- SIDEBAR -->
+<aside class="sidebar" id="mainSidebar">
+  <div class="sidebar-logo">
+    <div class="brand-logo"><i class="fas fa-truck"></i></div>
+    <div>
+      <div class="sidebar-brand-text">Quotation Management Portal</div>
+      <div class="sidebar-brand-sub">Tanzania Portal</div>
+    </div>
+  </div>
+  <div class="sidebar-section-label">Main Menu</div>
+  <ul class="sidebar-nav">
+    <li>
+      <button class="sidebar-link" onclick="showPage('home')" id="nav-home">
+        <span class="sidebar-icon"><i class="fas fa-home"></i></span>
+        <span class="sidebar-link-text">Home / Portal</span>
+      </button>
+    </li>
+  </ul>
+  <div class="sidebar-section-label">Administration</div>
+  <ul class="sidebar-nav">
+    <li>
+      <button class="sidebar-link" onclick="showPage('access-control')" id="nav-access-control">
+        <span class="sidebar-icon"><i class="fas fa-shield-alt"></i></span>
+        <span class="sidebar-link-text">Access Control</span>
+        <span class="sidebar-badge">4</span>
+      </button>
+    </li>
+    <li>
+      <button class="sidebar-link" onclick="showPage('product-master')" id="nav-product-master">
+        <span class="sidebar-icon"><i class="fas fa-boxes"></i></span>
+        <span class="sidebar-link-text">Product Master</span>
+      </button>
+    </li>
+    <li>
+      <button class="sidebar-link" onclick="showPage('price-master')" id="nav-price-master">
+        <span class="sidebar-icon"><i class="fas fa-tags"></i></span>
+        <span class="sidebar-link-text">Product Price Master</span>
+      </button>
+    </li>
+    <li>
+      <button class="sidebar-link" onclick="showPage('customer-master')" id="nav-customer-master">
+        <span class="sidebar-icon"><i class="fas fa-users"></i></span>
+        <span class="sidebar-link-text">Customer Master</span>
+      </button>
+    </li>
+  </ul>
+  <div class="sidebar-footer">
+    <div style="color:rgba(255,255,255,0.5);font-weight:600;margin-bottom:3px;">Quotation Management Portal</div>
+    <div>© 2026 Powered by Ebizframe.ai</div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT WRAPPER -->
+<div class="main-content-wrap" id="mainContentWrap">
+
+<!-- PAGE: HOME (original portal) -->
+<div class="menu-page active" id="page-home">
+
+<!-- NOTIFICATION BELL -->
+<button class="notif-btn" onclick="toggleNotif()" title="Notifications">
+  <i class="fas fa-bell"></i>
+  <span class="badge-count">7</span>
+</button>
+
+<!-- NOTIFICATION PANEL -->
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-header">
+    <h6><i class="fas fa-bell me-2"></i>Notifications</h6>
+    <button class="notif-close" onclick="toggleNotif()"><i class="fas fa-times"></i></button>
+  </div>
+  <div id="notifList"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg main-navbar">
+  <div class="container-xl">
+    <a class="navbar-brand" href="#">
+      <div class="brand-logo"><i class="fas fa-truck"></i></div>
+      <div class="brand-text">
+        <span class="brand-main">Quotation Management Portal</span>
+        <span class="brand-sub">Vehicle & Parts ERP Portal</span>
+      </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+        <li class="nav-item"><a class="nav-link" href="#hero"><i class="fas fa-home me-1"></i>Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#section-form"><i class="fas fa-file-alt me-1"></i>Request Quotation</a></li>
+        <li class="nav-item"><a class="nav-link" href="#section-dashboard"><i class="fas fa-chart-bar me-1"></i>Track Proposal</a></li>
+        <li class="nav-item"><a class="nav-link" href="#section-workflow"><i class="fas fa-project-diagram me-1"></i>Workflow</a></li>
+        <li class="nav-item"><a class="nav-link" href="#section-footer"><i class="fas fa-envelope me-1"></i>Contact</a></li>
+        <li class="nav-item ms-lg-2">
+          <a class="nav-link btn-login" href="#">
+            <i class="fas fa-sign-in-alt me-1"></i>Login
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ════ HERO ════ -->
+<section class="hero-section" id="hero">
+  <div class="container-xl position-relative" style="z-index:2;">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6" data-aos="fade-right">
+        <div class="hero-badge"><i class="fas fa-star"></i> Tanzania's Premier ERP Portal</div>
+        <h1 class="hero-title">Get Fast & <span class="accent">Accurate</span><br>Automotive Quotations</h1>
+        <p class="hero-sub">Submit your vehicle parts or industrial requirements online and receive professionally reviewed quotations from our ERP system — powered by real-time inventory and pricing.</p>
+        <div class="d-flex flex-wrap gap-3 mb-5">
+          <a href="#section-form" class="btn-hero-primary"><i class="fas fa-file-invoice me-2"></i>Customer Enquiry & Quotation</a>
+          <a href="#section-dashboard" class="btn-hero-outline"><i class="fas fa-search me-2"></i>Track Proposal</a>
+        </div>
+        <div class="row g-3">
+          <div class="col-6 col-sm-3" data-aos="fade-up" data-aos-delay="100">
+            <div class="hero-stat-card">
+              <div class="stat-num" data-count="1240">0</div>
+              <div class="stat-lbl">Quotations Issued</div>
+            </div>
+          </div>
+          <div class="col-6 col-sm-3" data-aos="fade-up" data-aos-delay="150">
+            <div class="hero-stat-card">
+              <div class="stat-num" data-count="380">0</div>
+              <div class="stat-lbl">Active Customers</div>
+            </div>
+          </div>
+          <div class="col-6 col-sm-3" data-aos="fade-up" data-aos-delay="200">
+            <div class="hero-stat-card">
+              <div class="stat-num" data-count="94">0</div>
+              <div class="stat-lbl">% Customer Satisfaction</div>
+            </div>
+          </div>
+          <div class="col-6 col-sm-3" data-aos="fade-up" data-aos-delay="250">
+            <div class="hero-stat-card">
+              <div class="stat-num" data-count="48">0</div>
+              <div class="stat-lbl">Avg Hours Response</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 d-flex justify-content-center" data-aos="fade-left">
+        <div class="hero-vehicle-graphic">
+          <div class="truck-svg-wrap" style="padding:0;overflow:hidden;border-radius:20px;border:2px solid rgba(244,180,0,0.3);box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+            <div style="position:relative;">
+              <img
+                id="safariHeroImg"
+                src="https://rajinderafrica.com/wp-content/uploads/2016/02/cruiserexplorer5x.jpeg"
+                alt="Safari Cruiser 5X Explorer — Tanzania"
+                style="width:100%;max-width:480px;display:block;border-radius:18px;object-fit:cover;object-position:center center;max-height:310px;"
+                onerror="this.onerror=null;this.src='https://rajinderafrica.com/wp-content/uploads/2016/02/CruiserOpenGameDrive.jpeg';"
+              />
+              <!-- Overlay gradient at bottom for badge -->
+              <div style="position:absolute;bottom:0;left:0;right:0;height:70px;background:linear-gradient(transparent,rgba(0,20,50,0.85));border-radius:0 0 18px 18px;"></div>
+              <!-- Safari badge over the image -->
+              <div style="position:absolute;bottom:14px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;">
+                <span style="background:rgba(244,180,0,0.92);color:#002244;font-size:0.7rem;font-weight:800;padding:4px 12px;border-radius:20px;letter-spacing:0.05em;">🚙 SAFARI MOTORS — TANZANIA</span>
+                <span style="background:rgba(0,123,94,0.9);color:#fff;font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:20px;">4×4 Fleet</span>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center gap-4 mt-0" style="padding:14px 20px;background:rgba(0,20,50,0.6);">
+              <div class="text-center"><div style="font-size:1.3rem;">🔧</div><div style="font-size:0.65rem;color:rgba(255,255,255,0.55);">Spare Parts</div></div>
+              <div class="text-center"><div style="font-size:1.3rem;">⛏️</div><div style="font-size:0.65rem;color:rgba(255,255,255,0.55);">Mining Eq.</div></div>
+              <div class="text-center"><div style="font-size:1.3rem;">🏗️</div><div style="font-size:0.65rem;color:rgba(255,255,255,0.55);">Construction</div></div>
+              <div class="text-center"><div style="font-size:1.3rem;">🚌</div><div style="font-size:0.65rem;color:rgba(255,255,255,0.55);">Fleet</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ════ ENQUIRY FORM ════ -->
+<section class="section-wrap" id="section-form" style="background:#F0F2F5;">
+  <div class="container-xl">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <div class="sec-tag"><i class="fas fa-file-invoice me-1"></i>Customer Portal</div>
+      <h2 class="sec-title">Customer Enquiry & <span>Quotation</span> Form</h2>
+      <p class="sec-lead mx-auto">Fill in your vehicle or parts requirement details. Our ERP system will validate and route to the sales team for a professional quotation.</p>
+    </div>
+
+    <div class="glass-card p-4 p-lg-5" data-aos="fade-up">
+      <form id="enquiryForm" novalidate>
+
+        <!-- SECTION 1: Customer Info -->
+        <div class="form-section-title"><i class="fas fa-user-circle text-warning"></i> Customer Information</div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <label class="form-label">Customer Name <span class="required-mark">*</span></label>
+            <input type="text" class="form-control" placeholder="Full Name" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Company Name</label>
+            <input type="text" class="form-control" placeholder="Company / Organisation">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Contact Person</label>
+            <input type="text" class="form-control" placeholder="Primary Contact">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Email <span class="required-mark">*</span></label>
+            <input type="email" class="form-control" placeholder="email@example.com" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Mobile Number <span class="required-mark">*</span></label>
+            <input type="tel" class="form-control" placeholder="+255 7XX XXX XXXX" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Country</label>
+            <input type="text" class="form-control" value="Tanzania">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">City</label>
+            <select class="form-select">
+              <option value="">Select City</option>
+              <option selected>Dar es Salaam</option>
+              <option>Arusha</option>
+              <option>Mwanza</option>
+              <option>Dodoma</option>
+              <option>Mbeya</option>
+              <option>Tanga</option>
+              <option>Zanzibar</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">TIN Number</label>
+            <input type="text" class="form-control" placeholder="TIN-XXXXXXXXX">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">VAT Number</label>
+            <input type="text" class="form-control" placeholder="VAT-XXXXXXXX">
+          </div>
+        </div>
+
+        <!-- SECTION 2: Vehicle Info -->
+        <div class="form-section-title"><i class="fas fa-truck text-warning"></i> Vehicle / Equipment Information</div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-3">
+            <label class="form-label">Vehicle Type</label>
+            <select class="form-select">
+              <option value="">Select Type</option>
+              <option>Passenger Car</option>
+              <option>Truck</option>
+              <option>Bus</option>
+              <option>Mining Equipment</option>
+              <option>Construction Equipment</option>
+              <option>Industrial Machinery</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Manufacturer</label>
+            <select class="form-select">
+              <option value="">Select Make</option>
+              <option>Toyota</option>
+              <option>Isuzu</option>
+              <option>Mitsubishi</option>
+              <option>Volvo</option>
+              <option>Scania</option>
+              <option>CAT</option>
+              <option>Komatsu</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Model</label>
+            <input type="text" class="form-control" placeholder="e.g. Hilux, FH16, 730E">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Year</label>
+            <select class="form-select" id="yearSelect"></select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">VIN / Chassis Number</label>
+            <input type="text" class="form-control" placeholder="VIN/Chassis No.">
+          </div>
+        </div>
+
+        <!-- PRODUCT REQUIREMENT GRID -->
+        <div class="form-section-title"><i class="fas fa-list-ul text-warning"></i> Product Requirement</div>
+        <div class="product-grid-wrap mb-3">
+          <table class="product-grid" id="productGrid">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Item Description</th>
+                <th>OEM Part No.</th>
+                <th>Unit</th>
+                <th>Qty</th>
+                <th>Excl. Price (TZS)</th>
+                <th>Tax 18%</th>
+                <th>Net Total</th>
+                <th>Priority</th>
+                <th>Delivery Date</th>
+                <th>Remarks</th>
+                <th>Del</th>
+              </tr>
+            </thead>
+            <tbody id="productRows"></tbody>
+          </table>
+        </div>
+        <div class="d-flex gap-2 mb-4">
+          <button type="button" class="btn btn-sm" onclick="addProductRow()" style="background:var(--navy);color:#fff;border-radius:8px;font-size:0.78rem;padding:8px 16px;"><i class="fas fa-plus me-1"></i>Add Row</button>
+          <label class="btn btn-sm" style="background:var(--green);color:#fff;border-radius:8px;font-size:0.78rem;padding:8px 16px;cursor:pointer;">
+            <i class="fas fa-upload me-1"></i>Upload RFQ
+            <input type="file" class="d-none" accept=".xlsx,.xls,.pdf">
+          </label>
+        </div>
+
+        <!-- DELIVERY DETAILS -->
+        <div class="form-section-title"><i class="fas fa-map-marker-alt text-warning"></i> Delivery Details</div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label">Delivery Location</label>
+            <input type="text" class="form-control" placeholder="Warehouse / Site Name">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Required Delivery Date</label>
+            <input type="date" class="form-control">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Address</label>
+            <input type="text" class="form-control" placeholder="Full delivery address">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Payment Terms</label>
+            <select class="form-select">
+              <option>Cash</option>
+              <option>30 Days</option>
+              <option>60 Days</option>
+              <option>90 Days</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="col-md-8">
+            <label class="form-label">Special Instructions</label>
+            <textarea class="form-control" rows="2" placeholder="Any special handling, packing or delivery notes..."></textarea>
+          </div>
+        </div>
+
+        <!-- ATTACHMENTS -->
+        <div class="form-section-title"><i class="fas fa-paperclip text-warning"></i> Attachments</div>
+        <div class="dropzone-area mb-4" id="dropzone" onclick="document.getElementById('fileInput').click()"
+          ondragover="event.preventDefault();this.classList.add('dragover')"
+          ondragleave="this.classList.remove('dragover')"
+          ondrop="handleDrop(event)">
+          <div class="dropzone-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+          <p class="fw-600 mb-1" style="font-size:0.88rem;font-weight:600;">Drag &amp; Drop files here or click to browse</p>
+          <p>Supported: PDF, Excel, Images, Word &nbsp;|&nbsp; Max Size: 20 MB per file</p>
+          <input type="file" id="fileInput" class="d-none" multiple accept=".pdf,.xlsx,.xls,.png,.jpg,.jpeg,.doc,.docx" onchange="handleFileInput(this)">
+        </div>
+        <div class="uploaded-files" id="uploadedFiles"></div>
+
+        <!-- SUBMIT BUTTONS -->
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          <button type="button" class="btn" style="background:#6B7280;color:#fff;border-radius:8px;padding:12px 24px;font-size:0.84rem;font-weight:600;"><i class="fas fa-save me-2"></i>Save Draft</button>
+          <button type="button" class="btn" onclick="submitEnquiry()" style="background:linear-gradient(135deg,var(--navy),var(--navy-light));color:#fff;border-radius:8px;padding:12px 28px;font-size:0.84rem;font-weight:700;"><i class="fas fa-paper-plane me-2"></i>Submit Enquiry</button>
+          <button type="reset" class="btn" style="background:transparent;border:2px solid #D1D5DB;color:var(--muted);border-radius:8px;padding:12px 24px;font-size:0.84rem;font-weight:600;"><i class="fas fa-redo me-2"></i>Reset</button>
+        </div>
+
+        <!-- SUCCESS BOX -->
+        <div class="success-box mt-4" id="successBox">
+          <div style="font-size:3rem;margin-bottom:12px;">✅</div>
+          <div class="success-enq" id="enqNumber">ENQ-2026-000001</div>
+          <div style="font-size:0.82rem;color:#6B7280;margin-top:4px;">Enquiry Number</div>
+          <div class="mt-3">
+            <span class="status-badge badge-submitted" style="font-size:0.82rem;padding:6px 16px;">● Submitted</span>
+          </div>
+          <p class="mt-3" style="font-size:0.88rem;color:#374151;">Your enquiry has been successfully submitted. Our sales team will review and respond within <strong>48 hours</strong>.</p>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ════ WORKFLOW ════ -->
+<section class="section-wrap" id="section-workflow" style="background:#fff;">
+  <div class="container-xl">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <div class="sec-tag"><i class="fas fa-project-diagram me-1"></i>ERP Process</div>
+      <h2 class="sec-title">Quotation <span>Workflow</span></h2>
+    </div>
+    <div class="workflow-wrap" data-aos="fade-up">
+      <div class="workflow-title"><i class="fas fa-cogs me-2"></i>End-to-End Proposal Process Flow</div>
+      <div class="workflow-steps" id="workflowSteps"></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ════ DASHBOARD / TRACK ════ -->
+<section class="section-wrap" id="section-dashboard" style="background:#F0F2F5;">
+  <div class="container-xl">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <div class="sec-tag"><i class="fas fa-chart-line me-1"></i>Management Dashboard</div>
+      <h2 class="sec-title">Quotation <span>Dashboard</span></h2>
+      <p class="sec-lead mx-auto">Real-time analytics and pipeline tracking for all active proposals.</p>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="row g-3 mb-5">
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="0"><div class="kpi-card kpi-1"><div class="kpi-icon"><i class="fas fa-file-alt"></i></div><div class="kpi-val" data-count="248">0</div><div class="kpi-lbl">Total Enquiries</div><div class="kpi-trend"><i class="fas fa-arrow-up"></i> +18% this month</div></div></div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="60"><div class="kpi-card kpi-2"><div class="kpi-icon"><i class="fas fa-paper-plane"></i></div><div class="kpi-val" data-count="183">0</div><div class="kpi-lbl">Proposals Submitted</div><div class="kpi-trend"><i class="fas fa-arrow-up"></i> +12% this month</div></div></div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="120"><div class="kpi-card kpi-3"><div class="kpi-icon"><i class="fas fa-hourglass-half"></i></div><div class="kpi-val" data-count="34">0</div><div class="kpi-lbl">Pending Approval</div><div class="kpi-trend"><i class="fas fa-minus"></i> 2 overdue</div></div></div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="180"><div class="kpi-card kpi-4"><div class="kpi-icon"><i class="fas fa-check-circle"></i></div><div class="kpi-val" data-count="97">0</div><div class="kpi-lbl">Approved</div><div class="kpi-trend"><i class="fas fa-arrow-up"></i> 52% conv. rate</div></div></div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="0"><div class="kpi-card kpi-5"><div class="kpi-icon"><i class="fas fa-times-circle"></i></div><div class="kpi-val" data-count="22">0</div><div class="kpi-lbl">Rejected</div><div class="kpi-trend"><i class="fas fa-arrow-down"></i> -5% vs last month</div></div></div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="60"><div class="kpi-card kpi-6"><div class="kpi-icon"><i class="fas fa-shopping-cart"></i></div><div class="kpi-val" data-count="64">0</div><div class="kpi-lbl">Converted to SO</div><div class="kpi-trend"><i class="fas fa-arrow-up"></i> +8 this week</div></div></div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="120"><div class="kpi-card kpi-7"><div class="kpi-icon"><i class="fas fa-dollar-sign"></i></div><div class="kpi-val">TZS 4.2B</div><div class="kpi-lbl">Revenue Pipeline</div><div class="kpi-trend"><i class="fas fa-arrow-up"></i> +23% vs target</div></div></div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="180"><div class="kpi-card kpi-8"><div class="kpi-icon"><i class="fas fa-clock"></i></div><div class="kpi-val">2.4 Days</div><div class="kpi-lbl">Avg Approval Time</div><div class="kpi-trend"><i class="fas fa-arrow-down"></i> -0.5d improvement</div></div></div>
+    </div>
+
+    <!-- PORTAL TABS -->
+    <ul class="nav portal-tabs mb-0" data-aos="fade-up">
+      <li class="nav-item"><button class="nav-link active" onclick="switchTab('quotations',this)"><i class="fas fa-list me-1"></i>Quotation List</button></li>
+      <li class="nav-item"><button class="nav-link" onclick="switchTab('timeline',this)"><i class="fas fa-stream me-1"></i>Follow-up Timeline</button></li>
+      <li class="nav-item"><button class="nav-link" onclick="switchTab('charts',this)"><i class="fas fa-chart-bar me-1"></i>Analytics</button></li>
+      <li class="nav-item"><button class="nav-link" onclick="switchTab('automation',this)"><i class="fas fa-robot me-1"></i>Automation</button></li>
+    </ul>
+
+    <!-- TAB: QUOTATION LIST -->
+    <div class="tab-panel" id="tab-quotations">
+      <div class="table-responsive">
+        <table id="quotationTable" class="table table-hover w-100" style="font-size:0.78rem;">
+          <thead>
+            <tr>
+              <th>Quot. No</th><th>Enq. No</th><th>Customer</th><th>Company</th>
+              <th>Country</th><th>Date</th><th>Sales Exec.</th><th>Amount (TZS)</th>
+              <th>Stage</th><th>Next Follow-up</th><th>Mgmt Status</th><th>Cust. Decision</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="quotTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB: TIMELINE -->
+    <div class="tab-panel d-none" id="tab-timeline">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="glass-card p-3">
+            <div class="form-label fw-bold mb-2" style="color:var(--navy);">Select Quotation</div>
+            <select class="form-select form-select-sm" id="timelineQuotSelect" onchange="renderTimeline()"></select>
+          </div>
+          <div class="glass-card p-3 mt-3">
+            <div class="form-section-title" style="margin-bottom:14px;"><i class="fas fa-plus text-warning"></i> Add Follow-up</div>
+            <div class="mb-2">
+              <label class="form-label">Follow-up Date</label>
+              <input type="date" class="form-control form-control-sm" id="fu_date">
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Follow-up By</label>
+              <input type="text" class="form-control form-control-sm" id="fu_by" placeholder="Sales Executive">
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Communication Mode</label>
+              <select class="form-select form-select-sm" id="fu_mode">
+                <option>Phone</option><option>Email</option><option>Meeting</option><option>WhatsApp</option><option>Portal</option>
+              </select>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Status</label>
+              <select class="form-select form-select-sm" id="fu_status">
+                <option>Proposal Submitted</option><option>Client Reviewing</option><option>Technical Discussion</option>
+                <option>Commercial Discussion</option><option>Price Negotiation</option><option>Waiting Client Approval</option>
+                <option>Go Ahead Received</option><option>Rejected</option><option>Sales Order Created</option>
+              </select>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Remarks</label>
+              <textarea class="form-control form-control-sm" id="fu_remarks" rows="2" placeholder="Notes..."></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Next Follow-up Date</label>
+              <input type="date" class="form-control form-control-sm" id="fu_next">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Priority</label>
+              <select class="form-select form-select-sm" id="fu_priority">
+                <option>High</option><option>Medium</option><option>Low</option>
+              </select>
+            </div>
+            <button class="btn btn-sm w-100" onclick="addFollowup()" style="background:var(--navy);color:#fff;border-radius:8px;font-weight:600;"><i class="fas fa-plus me-1"></i>Add Follow-up</button>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="timeline-wrap ps-2" id="timelineWrap"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: CHARTS -->
+    <div class="tab-panel d-none" id="tab-charts">
+      <div class="row g-4">
+        <div class="col-md-8"><div class="chart-card"><div class="chart-title">Monthly Enquiries vs Quotations vs Sales Orders</div><div class="chart-sub">Jan – Dec 2026</div><canvas id="lineChart" height="100"></canvas></div></div>
+        <div class="col-md-4"><div class="chart-card"><div class="chart-title">Pipeline Status Distribution</div><div class="chart-sub">Current month</div><canvas id="pieChart" height="180"></canvas></div></div>
+        <div class="col-md-6"><div class="chart-card"><div class="chart-title">Monthly Proposal Value (TZS M)</div><div class="chart-sub">2026</div><canvas id="barChart" height="130"></canvas></div></div>
+        <div class="col-md-6"><div class="chart-card"><div class="chart-title">Industry-wise Enquiry Breakdown</div><div class="chart-sub">All time</div><canvas id="industryChart" height="130"></canvas></div></div>
+        <div class="col-md-6"><div class="chart-card"><div class="chart-title">Vehicle-wise Analysis</div><div class="chart-sub">Top makes – YTD</div><canvas id="vehicleChart" height="130"></canvas></div></div>
+        <div class="col-md-6"><div class="chart-card"><div class="chart-title">Sales Executive Performance</div><div class="chart-sub">Proposals handled – YTD</div><canvas id="execChart" height="130"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- TAB: AUTOMATION -->
+    <div class="tab-panel d-none" id="tab-automation">
+      <div class="row g-5 align-items-start">
+        <div class="col-md-5">
+          <div class="sec-tag mb-2">ERP Integration</div>
+          <h4 style="font-weight:800;color:var(--navy);margin-bottom:16px;">Intelligent Automation Pipeline</h4>
+          <p style="font-size:0.86rem;color:var(--muted);line-height:1.8;">From the moment a customer submits an enquiry, the system automatically routes, validates, generates, and dispatches a polished quotation PDF — with zero manual intervention.</p>
+          <div class="d-flex flex-wrap gap-2 mt-3">
+            <span class="status-badge badge-submitted">API Connected</span>
+            <span class="status-badge badge-goahead">Live Data</span>
+            <span class="status-badge badge-proposal">Auto-Email</span>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <div class="auto-flow" id="autoFlow"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════ FOOTER ════ -->
+<footer class="main-footer" id="section-footer">
+  <div class="container-xl">
+    <div class="row g-5 mb-4">
+      <div class="col-lg-4">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div class="brand-logo" style="width:42px;height:42px;"><i class="fas fa-truck" style="font-size:1.1rem;"></i></div>
+          <div class="footer-brand">Quotation Management Portal</div>
+        </div>
+        <p class="footer-text">A leading automotive parts supplier and vehicle solutions provider serving Tanzania's mining, construction, agriculture, and transport sectors since 2008.</p>
+        <div class="footer-social mt-3">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-6">
+        <div class="footer-heading">Products</div>
+        <ul class="footer-links">
+          <li><a href="#">Spare Parts</a></li>
+          <li><a href="#">Mining Equipment</a></li>
+          <li><a href="#">Construction Parts</a></li>
+          <li><a href="#">Fleet Management</a></li>
+          <li><a href="#">Industrial Machinery</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-6">
+        <div class="footer-heading">Services</div>
+        <ul class="footer-links">
+          <li><a href="#">Vehicle Inspection</a></li>
+          <li><a href="#">Parts Sourcing</a></li>
+          <li><a href="#">Workshop Services</a></li>
+          <li><a href="#">Annual Maintenance</a></li>
+          <li><a href="#">Warranty Support</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-6">
+        <div class="footer-heading">Company</div>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Our Team</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-6">
+        <div class="footer-heading">Contact</div>
+        <ul class="footer-links">
+          <li><a href="#"><i class="fas fa-map-marker-alt me-1 text-warning"></i>Dar es Salaam, TZ</a></li>
+          <li><a href="mailto:info@safarimotor.co.tz"><i class="fas fa-envelope me-1 text-warning"></i>info@safarimotor.co.tz</a></li>
+          <li><a href="tel:+25522XXXXXXX"><i class="fas fa-phone me-1 text-warning"></i>+255 22 XXX XXXX</a></li>
+          <li><a href="#"><i class="fab fa-whatsapp me-1 text-warning"></i>+255 7XX XXX XXXX</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr class="footer-divider">
+    <div class="d-flex flex-wrap justify-content-between align-items-center">
+      <div class="footer-bottom">© 2026 Quotation Management Portal All rights reserved. Powered by Ebizframe.ai ERP</div>
+      <div class="footer-bottom">Made with <span style="color:var(--gold);">♥</span> in Dar es Salaam</div>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /page-home -->
+
+<!-- ════════════════════════════════════════
+     PAGE: ACCESS CONTROL
+════════════════════════════════════════ -->
+<div class="menu-page" id="page-access-control">
+  <div class="menu-page-header">
+    <div class="page-icon"><i class="fas fa-shield-alt"></i></div>
+    <div>
+      <h2>Access Control</h2>
+      <p>Manage user roles, permissions, and system access levels</p>
+    </div>
+  </div>
+  <div class="menu-page-body">
+
+    <!-- Toolbar -->
+    <div class="page-toolbar">
+      <div class="page-toolbar-title"><i class="fas fa-user-lock me-2" style="color:var(--gold);"></i>User Roles & Permissions</div>
+      <div class="d-flex gap-2">
+        <div class="search-bar-mini"><i class="fas fa-search" style="color:var(--muted);"></i><input type="text" placeholder="Search users..."></div>
+        <button class="btn-add-new"><i class="fas fa-plus"></i> Add User</button>
+      </div>
+    </div>
+
+    <!-- Role Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <div class="ac-role-card" style="border-left-color:#7C3AED;">
+          <div class="ac-role-icon" style="background:rgba(124,58,237,0.08);color:#7C3AED;"><i class="fas fa-crown"></i></div>
+          <div class="flex-1">
+            <div class="ac-role-name">Super Administrator</div>
+            <div class="ac-role-desc">Full system access — all modules, settings, and user management</div>
+            <div class="perm-grid">
+              <span class="perm-chip perm-yes"><i class="fas fa-check me-1"></i>All Modules</span>
+              <span class="perm-chip perm-yes"><i class="fas fa-check me-1"></i>User Mgmt</span>
+              <span class="perm-chip perm-yes"><i class="fas fa-check me-1"></i>Reports</span>
+              <span class="perm-chip perm-yes"><i class="fas fa-check me-1"></i>Settings</span>
+            </div>
+          </div>
+          <span class="perm-chip perm-yes" style="flex-shrink:0;">2 Users</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="ac-role-card" style="border-left-color:var(--navy);">
+          <div class="ac-role-icon"><i class="fas fa-user-tie"></i></div>
+          <div class="flex-1">
+            <div class="ac-role-name">Sales Manager</div>
+            <div class="ac-role-desc">View and approve quotations, manage sales executives, full pipeline visibility</div>
+            <div class="perm-grid">
+              <span class="perm-chip perm-yes"><i class="fas fa-check me-1"></i>Quotations</span>
+              <span class="perm-chip perm-yes"><i class="fas fa-check me-1"></i>Approve</span>
+              <span class="perm-chip perm-yes"><i class="fas fa-check me-1"></i>Reports</span>
+              <span class="perm-chip perm-no"><i class="fas fa-times me-1"></i>Settings</span>
+            </div>
+          </div>
+          <span class="perm-chip perm-yes" style="flex-shrink:0;">5 Users</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="ac-role-card" style="border-left-color:var(--green);">
+          <div class="ac-role-icon" style="background:rgba(0,123,94,0.08);color:var(--green);"><i class="fas fa-user"></i></div>
+          <div class="flex-1">
+            <div class="ac-role-name">Sales Executive</div>
+            <div class="ac-role-desc">Create and manage own quotations, view customer data, submit proposals</div>
+            <div class="perm-grid">
+              <span class="perm-chip perm-yes"><i class="fas fa-check me-1"></i>Create Quot.</span>
+              <span class="perm-chip perm-yes"><i class="fas fa-check me-1"></i>Own Records</span>
+              <span class="perm-chip perm-no"><i class="fas fa-times me-1"></i>Approve</span>
+              <span class="perm-chip perm-no"><i class="fas fa-times me-1"></i>Admin</span>
+            </div>
+          </div>
+          <span class="perm-chip perm-yes" style="flex-shrink:0;">12 Users</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="ac-role-card" style="border-left-color:var(--gold);">
+          <div class="ac-role-icon" style="background:rgba(244,180,0,0.1);color:#B45309;"><i class="fas fa-eye"></i></div>
+          <div class="flex-1">
+            <div class="ac-role-name">Read-Only Viewer</div>
+            <div class="ac-role-desc">View dashboard and reports only — no create, edit, or delete permissions</div>
+            <div class="perm-grid">
+              <span class="perm-chip perm-yes"><i class="fas fa-check me-1"></i>View Dashboard</span>
+              <span class="perm-chip perm-yes"><i class="fas fa-check me-1"></i>Reports</span>
+              <span class="perm-chip perm-no"><i class="fas fa-times me-1"></i>Create</span>
+              <span class="perm-chip perm-no"><i class="fas fa-times me-1"></i>Edit</span>
+            </div>
+          </div>
+          <span class="perm-chip perm-yes" style="flex-shrink:0;">8 Users</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="page-toolbar mt-4">
+      <div class="page-toolbar-title"><i class="fas fa-users me-2" style="color:var(--gold);"></i>System Users</div>
+    </div>
+    <div class="user-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Full Name</th><th>Email</th><th>Role</th><th>Department</th><th>Last Login</th><th>Status</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><strong>James Mwamba</strong></td><td>james@safarimotor.co.tz</td><td><span class="perm-chip" style="background:rgba(124,58,237,0.1);color:#7C3AED;border:1px solid rgba(124,58,237,0.2);">Super Admin</span></td><td>IT</td><td>Today 09:14</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td>2</td><td><strong>Sarah Njoroge</strong></td><td>sarah@safarimotor.co.tz</td><td><span class="perm-chip" style="background:rgba(0,51,102,0.1);color:var(--navy);border:1px solid rgba(0,51,102,0.2);">Sales Manager</span></td><td>Sales</td><td>Today 08:52</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td>3</td><td><strong>Patrick Kimaro</strong></td><td>patrick@safarimotor.co.tz</td><td><span class="perm-chip" style="background:rgba(0,123,94,0.1);color:var(--green);border:1px solid rgba(0,123,94,0.2);">Sales Executive</span></td><td>Sales</td><td>Yesterday</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td>4</td><td><strong>Diana Shao</strong></td><td>diana@safarimotor.co.tz</td><td><span class="perm-chip" style="background:rgba(0,123,94,0.1);color:var(--green);border:1px solid rgba(0,123,94,0.2);">Sales Executive</span></td><td>Sales</td><td>Today 10:05</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td>5</td><td><strong>Moses Osei</strong></td><td>moses@safarimotor.co.tz</td><td><span class="perm-chip" style="background:rgba(244,180,0,0.12);color:#B45309;border:1px solid rgba(244,180,0,0.3);">Viewer</span></td><td>Finance</td><td>3 days ago</td><td><span class="status-dot" style="background:#DC2626;"></span>Inactive</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td>6</td><td><strong>Amina Hassan</strong></td><td>amina@safarimotor.co.tz</td><td><span class="perm-chip" style="background:rgba(0,51,102,0.1);color:var(--navy);border:1px solid rgba(0,51,102,0.2);">Sales Manager</span></td><td>Sales</td><td>Today 07:30</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div><!-- /page-access-control -->
+
+<!-- ════════════════════════════════════════
+     PAGE: PRODUCT MASTER
+════════════════════════════════════════ -->
+<div class="menu-page" id="page-product-master">
+  <div class="menu-page-header">
+    <div class="page-icon"><i class="fas fa-boxes"></i></div>
+    <div>
+      <h2>Product Master</h2>
+      <p>Manage all product categories, items, OEM references, and specifications</p>
+    </div>
+  </div>
+  <div class="menu-page-body">
+
+    <!-- Toolbar -->
+    <div class="page-toolbar">
+      <div class="page-toolbar-title"><i class="fas fa-th-large me-2" style="color:var(--gold);"></i>Product Categories</div>
+      <div class="d-flex gap-2">
+        <div class="search-bar-mini"><i class="fas fa-search" style="color:var(--muted);"></i><input type="text" placeholder="Search products..."></div>
+        <button class="btn-add-new"><i class="fas fa-plus"></i> Add Product</button>
+      </div>
+    </div>
+
+    <!-- Category Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3"><div class="pm-cat-card selected"><div class="pm-cat-icon">🔧</div><div class="pm-cat-name">Spare Parts</div><div class="pm-cat-count">1,248 items</div></div></div>
+      <div class="col-6 col-md-3"><div class="pm-cat-card"><div class="pm-cat-icon">⛏️</div><div class="pm-cat-name">Mining Equipment</div><div class="pm-cat-count">342 items</div></div></div>
+      <div class="col-6 col-md-3"><div class="pm-cat-card"><div class="pm-cat-icon">🏗️</div><div class="pm-cat-name">Construction Parts</div><div class="pm-cat-count">516 items</div></div></div>
+      <div class="col-6 col-md-3"><div class="pm-cat-card"><div class="pm-cat-icon">🚌</div><div class="pm-cat-name">Fleet Components</div><div class="pm-cat-count">289 items</div></div></div>
+      <div class="col-6 col-md-3"><div class="pm-cat-card"><div class="pm-cat-icon">⚙️</div><div class="pm-cat-name">Engine Parts</div><div class="pm-cat-count">764 items</div></div></div>
+      <div class="col-6 col-md-3"><div class="pm-cat-card"><div class="pm-cat-icon">🛢️</div><div class="pm-cat-name">Lubricants & Oils</div><div class="pm-cat-count">128 items</div></div></div>
+      <div class="col-6 col-md-3"><div class="pm-cat-card"><div class="pm-cat-icon">🔌</div><div class="pm-cat-name">Electrical Parts</div><div class="pm-cat-count">445 items</div></div></div>
+      <div class="col-6 col-md-3"><div class="pm-cat-card"><div class="pm-cat-icon">🛞</div><div class="pm-cat-name">Tyres & Wheels</div><div class="pm-cat-count">196 items</div></div></div>
+    </div>
+
+    <!-- Products Table -->
+    <div class="page-toolbar mt-2">
+      <div class="page-toolbar-title"><i class="fas fa-list me-2" style="color:var(--gold);"></i>Product List — Spare Parts</div>
+      <div>
+        <span style="font-size:0.75rem;color:var(--muted);">Showing 1–10 of 1,248</span>
+      </div>
+    </div>
+    <div class="user-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Product Code</th><th>Description</th><th>OEM Part No.</th><th>Make</th><th>Category</th><th>Unit</th><th>Stock Qty</th><th>Status</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>PRD-001</strong></td><td>Engine Oil Filter — Toyota Hilux 2.8D</td><td>OEM-90915-YZZD2</td><td>Toyota</td><td>Engine Parts</td><td>Pcs</td><td>245</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td><strong>PRD-002</strong></td><td>Brake Pad Set — Isuzu NPR 75</td><td>OEM-8972398710</td><td>Isuzu</td><td>Spare Parts</td><td>Set</td><td>128</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td><strong>PRD-003</strong></td><td>Air Filter — Volvo FH16</td><td>OEM-VOL-21834294</td><td>Volvo</td><td>Engine Parts</td><td>Pcs</td><td>56</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td><strong>PRD-004</strong></td><td>Hydraulic Pump — CAT 730E</td><td>OEM-CAT-2631921</td><td>CAT</td><td>Mining Equipment</td><td>Pcs</td><td>8</td><td><span class="status-dot" style="background:#D97706;"></span>Low Stock</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td><strong>PRD-005</strong></td><td>Clutch Disc Assembly — Mitsubishi Fuso</td><td>OEM-ME521002</td><td>Mitsubishi</td><td>Spare Parts</td><td>Set</td><td>32</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td><strong>PRD-006</strong></td><td>Wheel Hub — Scania R580</td><td>OEM-SCA-1319811</td><td>Scania</td><td>Tyres & Wheels</td><td>Pcs</td><td>0</td><td><span class="status-dot" style="background:#DC2626;"></span>Out of Stock</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td><strong>PRD-007</strong></td><td>Alternator 24V — Komatsu PC360</td><td>OEM-KOM-6745-81-9930</td><td>Komatsu</td><td>Electrical Parts</td><td>Pcs</td><td>15</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div><!-- /page-product-master -->
+
+<!-- ════════════════════════════════════════
+     PAGE: PRODUCT PRICE MASTER
+════════════════════════════════════════ -->
+<div class="menu-page" id="page-price-master">
+  <div class="menu-page-header">
+    <div class="page-icon"><i class="fas fa-tags"></i></div>
+    <div>
+      <h2>Product Price Master</h2>
+      <p>Configure pricing tiers, customer-type discounts, and regional price lists</p>
+    </div>
+  </div>
+  <div class="menu-page-body">
+
+    <!-- Pricing Tiers -->
+    <div class="page-toolbar">
+      <div class="page-toolbar-title"><i class="fas fa-layer-group me-2" style="color:var(--gold);"></i>Pricing Tiers</div>
+      <button class="btn-add-new"><i class="fas fa-plus"></i> New Price List</button>
+    </div>
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="price-tier-card tier-1">
+          <div class="tier-name">Standard</div>
+          <div class="tier-desc">Walk-in & new customers</div>
+          <div class="tier-discount" style="color:var(--gold);">0%</div>
+          <div class="tier-label">Discount</div>
+          <div class="perm-grid mt-2">
+            <span class="perm-chip perm-yes">Active</span>
+            <span class="perm-chip" style="background:rgba(0,51,102,0.08);color:var(--navy);border:1px solid rgba(0,51,102,0.15);">248 Items</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="price-tier-card tier-2">
+          <div class="tier-name">Trade</div>
+          <div class="tier-desc">Registered trade partners</div>
+          <div class="tier-discount" style="color:var(--green);">8%</div>
+          <div class="tier-label">Discount</div>
+          <div class="perm-grid mt-2">
+            <span class="perm-chip perm-yes">Active</span>
+            <span class="perm-chip" style="background:rgba(0,51,102,0.08);color:var(--navy);border:1px solid rgba(0,51,102,0.15);">248 Items</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="price-tier-card tier-3">
+          <div class="tier-name">Corporate</div>
+          <div class="tier-desc">Long-term corporate clients</div>
+          <div class="tier-discount" style="color:var(--navy);">15%</div>
+          <div class="tier-label">Discount</div>
+          <div class="perm-grid mt-2">
+            <span class="perm-chip perm-yes">Active</span>
+            <span class="perm-chip" style="background:rgba(0,51,102,0.08);color:var(--navy);border:1px solid rgba(0,51,102,0.15);">248 Items</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="price-tier-card tier-4">
+          <div class="tier-name">Government</div>
+          <div class="tier-desc">Govt. & NGO procurement</div>
+          <div class="tier-discount" style="color:#7C3AED;">20%</div>
+          <div class="tier-label">Discount</div>
+          <div class="perm-grid mt-2">
+            <span class="perm-chip perm-yes">Active</span>
+            <span class="perm-chip" style="background:rgba(0,51,102,0.08);color:var(--navy);border:1px solid rgba(0,51,102,0.15);">248 Items</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Price List Table -->
+    <div class="page-toolbar mt-2">
+      <div class="page-toolbar-title"><i class="fas fa-file-invoice-dollar me-2" style="color:var(--gold);"></i>Current Price List — Standard (TZS)</div>
+      <div class="d-flex gap-2">
+        <div class="search-bar-mini"><i class="fas fa-search" style="color:var(--muted);"></i><input type="text" placeholder="Search products..."></div>
+        <button class="btn-add-new" style="background:linear-gradient(135deg,var(--green),var(--green-light));"><i class="fas fa-file-export"></i> Export</button>
+      </div>
+    </div>
+    <div class="user-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Product Code</th><th>Description</th><th>Make</th><th>Unit</th>
+            <th>Base Price (TZS)</th><th>Trade (8%)</th><th>Corporate (15%)</th><th>Govt (20%)</th><th>Valid Until</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>PRD-001</strong></td><td>Engine Oil Filter — Toyota Hilux</td><td>Toyota</td><td>Pcs</td><td>45,000</td><td>41,400</td><td>38,250</td><td>36,000</td><td>31 Dec 2026</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td><strong>PRD-002</strong></td><td>Brake Pad Set — Isuzu NPR 75</td><td>Isuzu</td><td>Set</td><td>185,000</td><td>170,200</td><td>157,250</td><td>148,000</td><td>31 Dec 2026</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td><strong>PRD-003</strong></td><td>Air Filter — Volvo FH16</td><td>Volvo</td><td>Pcs</td><td>320,000</td><td>294,400</td><td>272,000</td><td>256,000</td><td>31 Dec 2026</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td><strong>PRD-004</strong></td><td>Hydraulic Pump — CAT 730E</td><td>CAT</td><td>Pcs</td><td>4,800,000</td><td>4,416,000</td><td>4,080,000</td><td>3,840,000</td><td>31 Dec 2026</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td><strong>PRD-005</strong></td><td>Clutch Disc Assembly — Mitsubishi</td><td>Mitsubishi</td><td>Set</td><td>560,000</td><td>515,200</td><td>476,000</td><td>448,000</td><td>31 Dec 2026</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td><strong>PRD-006</strong></td><td>Wheel Hub — Scania R580</td><td>Scania</td><td>Pcs</td><td>890,000</td><td>818,800</td><td>756,500</td><td>712,000</td><td>31 Dec 2026</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td><strong>PRD-007</strong></td><td>Alternator 24V — Komatsu PC360</td><td>Komatsu</td><td>Pcs</td><td>1,250,000</td><td>1,150,000</td><td>1,062,500</td><td>1,000,000</td><td>31 Dec 2026</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div><!-- /page-price-master -->
+
+<!-- ════════════════════════════════════════
+     PAGE: CUSTOMER MASTER
+════════════════════════════════════════ -->
+<div class="menu-page" id="page-customer-master">
+  <div class="menu-page-header">
+    <div class="page-icon"><i class="fas fa-users"></i></div>
+    <div>
+      <h2>Customer Master</h2>
+      <p>Manage customer profiles, segments, credit terms, and account information</p>
+    </div>
+  </div>
+  <div class="menu-page-body">
+
+    <!-- KPI Summary -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3"><div class="kpi-card kpi-2" style="padding:18px;"><div class="kpi-icon" style="font-size:1.4rem;margin-bottom:8px;"><i class="fas fa-users"></i></div><div class="kpi-val" style="font-size:1.8rem;">380</div><div class="kpi-lbl">Total Customers</div></div></div>
+      <div class="col-6 col-md-3"><div class="kpi-card kpi-1" style="padding:18px;"><div class="kpi-icon" style="font-size:1.4rem;margin-bottom:8px;"><i class="fas fa-building"></i></div><div class="kpi-val" style="font-size:1.8rem;">248</div><div class="kpi-lbl">Corporate</div></div></div>
+      <div class="col-6 col-md-3"><div class="kpi-card kpi-3" style="padding:18px;"><div class="kpi-icon" style="font-size:1.4rem;margin-bottom:8px;"><i class="fas fa-star"></i></div><div class="kpi-val" style="font-size:1.8rem;">62</div><div class="kpi-lbl">VIP Accounts</div></div></div>
+      <div class="col-6 col-md-3"><div class="kpi-card kpi-6" style="padding:18px;"><div class="kpi-icon" style="font-size:1.4rem;margin-bottom:8px;"><i class="fas fa-user-plus"></i></div><div class="kpi-val" style="font-size:1.8rem;">18</div><div class="kpi-lbl">New This Month</div></div></div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="page-toolbar">
+      <div class="page-toolbar-title"><i class="fas fa-address-book me-2" style="color:var(--gold);"></i>Customer Directory</div>
+      <div class="d-flex gap-2">
+        <div class="search-bar-mini"><i class="fas fa-search" style="color:var(--muted);"></i><input type="text" placeholder="Search customers..."></div>
+        <button class="btn-add-new"><i class="fas fa-plus"></i> Add Customer</button>
+      </div>
+    </div>
+
+    <!-- Customer Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-6 col-lg-4"><div class="cust-card"><div class="cust-avatar" style="background:linear-gradient(135deg,#003366,#004499);">BI</div><div class="flex-1"><div class="cust-name">Baraka Industries</div><div class="cust-info"><i class="fas fa-map-marker-alt me-1"></i>Dar es Salaam &nbsp;|&nbsp; <i class="fas fa-phone me-1"></i>+255 22 XXX XXXX</div><div><span class="cust-type-badge" style="background:rgba(124,58,237,0.1);color:#7C3AED;border:1px solid rgba(124,58,237,0.2);">VIP Corporate</span></div></div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="cust-card"><div class="cust-avatar" style="background:linear-gradient(135deg,#007B5E,#009970);">KM</div><div class="flex-1"><div class="cust-name">Kilimanjaro Mining Co.</div><div class="cust-info"><i class="fas fa-map-marker-alt me-1"></i>Arusha &nbsp;|&nbsp; <i class="fas fa-phone me-1"></i>+255 27 XXX XXXX</div><div><span class="cust-type-badge" style="background:rgba(0,123,94,0.1);color:var(--green);border:1px solid rgba(0,123,94,0.2);">Government</span></div></div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="cust-card"><div class="cust-avatar" style="background:linear-gradient(135deg,#D97706,#F59E0B);">MT</div><div class="flex-1"><div class="cust-name">Mwanza Transport Ltd.</div><div class="cust-info"><i class="fas fa-map-marker-alt me-1"></i>Mwanza &nbsp;|&nbsp; <i class="fas fa-phone me-1"></i>+255 28 XXX XXXX</div><div><span class="cust-type-badge" style="background:rgba(217,119,6,0.1);color:#B45309;border:1px solid rgba(217,119,6,0.2);">Trade Partner</span></div></div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="cust-card"><div class="cust-avatar" style="background:linear-gradient(135deg,#0891B2,#06B6D4);">SC</div><div class="flex-1"><div class="cust-name">Serengeti Construction</div><div class="cust-info"><i class="fas fa-map-marker-alt me-1"></i>Arusha &nbsp;|&nbsp; <i class="fas fa-phone me-1"></i>+255 27 XXX XXXX</div><div><span class="cust-type-badge" style="background:rgba(8,145,178,0.1);color:#0891B2;border:1px solid rgba(8,145,178,0.2);">Corporate</span></div></div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="cust-card"><div class="cust-avatar" style="background:linear-gradient(135deg,#7C3AED,#8B5CF6);">DL</div><div class="flex-1"><div class="cust-name">Dodoma Logistics</div><div class="cust-info"><i class="fas fa-map-marker-alt me-1"></i>Dodoma &nbsp;|&nbsp; <i class="fas fa-phone me-1"></i>+255 26 XXX XXXX</div><div><span class="cust-type-badge" style="background:rgba(0,51,102,0.08);color:var(--navy);border:1px solid rgba(0,51,102,0.15);">Standard</span></div></div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="cust-card"><div class="cust-avatar" style="background:linear-gradient(135deg,#DC2626,#EF4444);">TR</div><div class="flex-1"><div class="cust-name">TanZam Railways</div><div class="cust-info"><i class="fas fa-map-marker-alt me-1"></i>Dar es Salaam &nbsp;|&nbsp; <i class="fas fa-phone me-1"></i>+255 22 XXX XXXX</div><div><span class="cust-type-badge" style="background:rgba(0,123,94,0.1);color:var(--green);border:1px solid rgba(0,123,94,0.2);">Government</span></div></div></div></div>
+    </div>
+
+    <!-- Full Customer Table -->
+    <div class="page-toolbar mt-2">
+      <div class="page-toolbar-title"><i class="fas fa-table me-2" style="color:var(--gold);"></i>All Customers</div>
+    </div>
+    <div class="user-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Company</th><th>Contact Person</th><th>City</th><th>TIN</th><th>Type</th><th>Credit Limit (TZS)</th><th>Payment Terms</th><th>Status</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><strong>Baraka Industries</strong></td><td>Ahmed Hassan</td><td>Dar es Salaam</td><td>TIN-100234567</td><td><span class="cust-type-badge" style="background:rgba(124,58,237,0.1);color:#7C3AED;border:1px solid rgba(124,58,237,0.2);">VIP</span></td><td>500,000,000</td><td>Net 60</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td>2</td><td><strong>Kilimanjaro Mining Co.</strong></td><td>Grace Mwamba</td><td>Arusha</td><td>TIN-200345678</td><td><span class="cust-type-badge" style="background:rgba(0,123,94,0.1);color:var(--green);border:1px solid rgba(0,123,94,0.2);">Govt.</span></td><td>1,000,000,000</td><td>Net 90</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td>3</td><td><strong>Mwanza Transport Ltd.</strong></td><td>John Kimaro</td><td>Mwanza</td><td>TIN-300456789</td><td><span class="cust-type-badge" style="background:rgba(217,119,6,0.1);color:#B45309;border:1px solid rgba(217,119,6,0.2);">Trade</span></td><td>200,000,000</td><td>Net 30</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td>4</td><td><strong>Serengeti Construction</strong></td><td>Fatima Osei</td><td>Arusha</td><td>TIN-400567890</td><td><span class="cust-type-badge" style="background:rgba(8,145,178,0.1);color:#0891B2;border:1px solid rgba(8,145,178,0.2);">Corp.</span></td><td>300,000,000</td><td>Net 45</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td>5</td><td><strong>Dodoma Logistics</strong></td><td>David Njoroge</td><td>Dodoma</td><td>TIN-500678901</td><td><span class="cust-type-badge" style="background:rgba(0,51,102,0.08);color:var(--navy);border:1px solid rgba(0,51,102,0.15);">Std.</span></td><td>50,000,000</td><td>Net 15</td><td><span class="status-dot" style="background:#D97706;"></span>On Hold</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td>6</td><td><strong>TanZam Railways</strong></td><td>Maria Shao</td><td>Dar es Salaam</td><td>TIN-600789012</td><td><span class="cust-type-badge" style="background:rgba(0,123,94,0.1);color:var(--green);border:1px solid rgba(0,123,94,0.2);">Govt.</span></td><td>800,000,000</td><td>Net 90</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+          <tr><td>7</td><td><strong>Zanzibar Fisheries Ltd.</strong></td><td>Samuel Baraka</td><td>Zanzibar</td><td>TIN-700890123</td><td><span class="cust-type-badge" style="background:rgba(0,51,102,0.08);color:var(--navy);border:1px solid rgba(0,51,102,0.15);">Std.</span></td><td>25,000,000</td><td>Cash</td><td><span class="status-dot" style="background:#059669;"></span>Active</td><td><button class="btn-add-new" style="padding:5px 12px;font-size:0.7rem;"><i class="fas fa-edit"></i></button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div><!-- /page-customer-master -->
+
+</div><!-- /main-content-wrap -->
+</div><!-- /app-shell -->
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
+<script>
+// ── AOS INIT ──
+AOS.init({ duration: 700, once: true, easing: 'ease-out-cubic' });
+
+// ── YEAR SELECT ──
+(function() {
+  const sel = document.getElementById('yearSelect');
+  const cur = new Date().getFullYear();
+  for (let y = cur; y >= 1990; y--) {
+    const o = document.createElement('option');
+    o.value = y; o.textContent = y;
+    sel.appendChild(o);
+  }
+})();
+
+// ── DATA ──
+const salesExecs = ['James Mwamba', 'Sarah Njoroge', 'Patrick Kimaro', 'Diana Shao', 'Moses Osei'];
+const customers = [
+  ['Baraka Industries','Dar es Salaam'],['Kilimanjaro Mining Co.','Arusha'],['Mwanza Transport Ltd.','Mwanza'],
+  ['Serengeti Construction','Arusha'],['Dodoma Logistics','Dodoma'],['TanZam Railways','Dar es Salaam'],
+  ['SunGold FMCG','Dar es Salaam'],['AfriCat Safari','Arusha'],['Great Rift Mining','Mbeya'],
+  ['Coastal Fleet Services','Tanga'],['Ngorongoro Agri Ltd.','Arusha'],['Pemba Industrial','Zanzibar'],
+  ['Dar Port Authority','Dar es Salaam'],['Rufiji Power Corp','Dodoma'],['Tanga Cement Ltd.','Tanga'],
+  ['Mbeya Coal Ltd.','Mbeya'],['Singida Wind Power','Singida'],['Zanzibar Fisheries','Zanzibar'],
+  ['Lake Victoria Trans.','Mwanza'],['East Africa Rails','Dar es Salaam']
+];
+const stages = ['Draft','Submitted','Under Review','Management Approval Pending','Proposal Submitted','Client Review','Go Ahead','Rejected','Converted to SO'];
+const stageBadges = ['badge-draft','badge-submitted','badge-review','badge-approval','badge-proposal','badge-client-review','badge-goahead','badge-rejected','badge-converted'];
+const amounts = [18500000,42000000,7800000,96500000,31000000,55000000,12400000,88000000,22000000,
+  67000000,44500000,19000000,78000000,35000000,51000000,110000000,9800000,63000000,28000000,47000000];
+
+const quotations = Array.from({length:15}, (_,i) => {
+  const c = customers[i % customers.length];
+  const stI = i % stages.length;
+  const d = new Date(2026, Math.floor(i/2), (i*3%28)+1);
+  const nf = new Date(d); nf.setDate(nf.getDate()+5);
+  return {
+    qno:`QT-2026-${String(i+1).padStart(4,'0')}`,
+    eno:`ENQ-2026-${String(i+1).padStart(6,'0')}`,
+    customer: `${['Ahmed','Grace','John','Fatima','David','Maria','Samuel','Joy','Peter','Lily','Tom','Amina','Chris','Nadia','Hassan'][i]} ${['Hassan','Mwamba','Kimaro','Osei','Njoroge','Shao','Baraka','Kimani','Mkuu','Otieno','Mwangi','Juma','Banda','Phiri','Salim'][i]}`,
+    company: c[0], country:'Tanzania', city: c[1],
+    date: d.toLocaleDateString('en-GB'),
+    exec: salesExecs[i % salesExecs.length],
+    amount: amounts[i].toLocaleString(),
+    stage: stages[stI], stageIdx: stI,
+    nfDate: nf.toLocaleDateString('en-GB'),
+    mgmt: ['Approved','Pending','Under Review','Escalated'][i%4],
+    decision: ['Accepted','Pending','Negotiating','Declined','Waiting'][i%5]
+  };
+});
+
+// ── PRODUCT GRID ──
+let rowCount = 0;
+function addProductRow() {
+  rowCount++;
+  const r = document.createElement('tr');
+  r.id = `row_${rowCount}`;
+  r.innerHTML = `
+    <td style="text-align:center;color:var(--muted);font-size:0.75rem;">${rowCount}</td>
+    <td><input type="text" placeholder="Item Description" style="min-width:160px;"></td>
+    <td><input type="text" placeholder="OEM-XXXXX" style="min-width:110px;"></td>
+    <td><select style="min-width:70px;"><option>Pcs</option><option>Kg</option><option>Ltr</option><option>Set</option><option>Box</option></select></td>
+    <td><input type="number" placeholder="0" min="0" oninput="calcRow(this)" style="min-width:60px;" class="qty-field"></td>
+    <td><input type="number" placeholder="0.00" min="0" oninput="calcRow(this)" style="min-width:100px;" class="price-field"></td>
+    <td><input type="number" readonly style="min-width:80px;background:#F9FAFB;" class="tax-field"></td>
+    <td><input type="number" readonly style="min-width:100px;background:#F9FAFB;font-weight:600;" class="total-field"></td>
+    <td><select style="min-width:80px;"><option>High</option><option>Medium</option><option>Low</option></select></td>
+    <td><input type="date" style="min-width:130px;"></td>
+    <td><input type="text" placeholder="Remarks" style="min-width:120px;"></td>
+    <td><button class="btn-del-row" onclick="delRow('row_${rowCount}')"><i class="fas fa-trash-alt"></i></button></td>`;
+  document.getElementById('productRows').appendChild(r);
+}
+function calcRow(el) {
+  const row = el.closest('tr');
+  const qty = parseFloat(row.querySelector('.qty-field').value) || 0;
+  const price = parseFloat(row.querySelector('.price-field').value) || 0;
+  const excl = qty * price;
+  const tax = excl * 0.18;
+  const total = excl + tax;
+  row.querySelector('.tax-field').value = tax.toFixed(2);
+  row.querySelector('.total-field').value = total.toFixed(2);
+}
+function delRow(id) { const r = document.getElementById(id); if(r) r.remove(); }
+addProductRow(); addProductRow();
+
+// ── DROPZONE ──
+function handleFileInput(inp) { addFiles(Array.from(inp.files)); }
+function handleDrop(e) { e.preventDefault(); document.getElementById('dropzone').classList.remove('dragover'); addFiles(Array.from(e.dataTransfer.files)); }
+function addFiles(files) {
+  const wrap = document.getElementById('uploadedFiles');
+  files.forEach(f => {
+    const chip = document.createElement('div');
+    chip.className = 'file-chip';
+    chip.innerHTML = `<i class="fas fa-file"></i>${f.name} <span style="cursor:pointer;opacity:0.5;" onclick="this.parentNode.remove()">×</span>`;
+    wrap.appendChild(chip);
+  });
+}
+
+// ── SUBMIT ──
+let enqCounter = 2;
+function submitEnquiry() {
+  const sb = document.getElementById('successBox');
+  sb.classList.add('show');
+  const num = `ENQ-2026-${String(enqCounter).padStart(6,'0')}`;
+  document.getElementById('enqNumber').textContent = num;
+  enqCounter++;
+  sb.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+// ── WORKFLOW ──
+const wfSteps = [
+  {icon:'fa-user',label:'Customer Enquiry'},
+  {icon:'fa-database',label:'ERP Validation'},
+  {icon:'fa-users',label:'Sales Review'},
+  {icon:'fa-file-invoice',label:'Quotation Prep'},
+  {icon:'fa-shield-alt',label:'Mgmt Approval'},
+  {icon:'fa-paper-plane',label:'Proposal Sent'},
+  {icon:'fa-eye',label:'Customer Review'},
+  {icon:'fa-comments',label:'Negotiation'},
+  {icon:'fa-thumbs-up',label:'Approved'},
+  {icon:'fa-shopping-cart',label:'Sales Order'}
+];
+(function() {
+  const wrap = document.getElementById('workflowSteps');
+  wfSteps.forEach((s, i) => {
+    if (i > 0) {
+      const arr = document.createElement('div');
+      arr.className = 'wf-arrow';
+      arr.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      wrap.appendChild(arr);
+    }
+    const step = document.createElement('div');
+    step.className = 'wf-step';
+    const cls = i < 4 ? 'done' : (i === 4 ? 'active' : '');
+    step.innerHTML = `<div class="wf-circle ${cls}" style="animation-delay:${i*0.3}s"><i class="fas ${s.icon}"></i></div><div class="wf-label">${s.label}</div>`;
+    wrap.appendChild(step);
+    setTimeout(()=>{ if(i < 5) step.querySelector('.wf-circle').classList.add('done'); }, 1200 + i * 300);
+  });
+})();
+
+// ── DATATABLE ──
+$(document).ready(function() {
+  const tbody = document.getElementById('quotTableBody');
+  quotations.forEach(q => {
+    const mgmtCls = q.mgmt==='Approved'?'badge-goahead':(q.mgmt==='Pending'?'badge-review':'badge-approval');
+    const decCls = q.decision==='Accepted'?'badge-goahead':(q.decision==='Declined'?'badge-rejected':'badge-submitted');
+    tbody.innerHTML += `<tr>
+      <td class="fw-600" style="font-weight:600;color:var(--navy);">${q.qno}</td>
+      <td style="color:var(--muted);font-size:0.72rem;">${q.eno}</td>
+      <td>${q.customer}</td><td style="color:var(--muted);">${q.company}</td><td>${q.country}</td>
+      <td>${q.date}</td><td>${q.exec}</td>
+      <td class="fw-600" style="font-weight:600;">TZS ${q.amount}</td>
+      <td><span class="status-badge ${stageBadges[q.stageIdx]}">${q.stage}</span></td>
+      <td>${q.nfDate}</td>
+      <td><span class="status-badge ${mgmtCls}">${q.mgmt}</span></td>
+      <td><span class="status-badge ${decCls}">${q.decision}</span></td>
+      <td>
+        <div class="d-flex gap-1">
+          <button class="btn btn-sm" title="View" style="padding:3px 7px;font-size:0.7rem;background:var(--navy);color:#fff;border-radius:5px;border:none;"><i class="fas fa-eye"></i></button>
+          <button class="btn btn-sm" title="Edit" style="padding:3px 7px;font-size:0.7rem;background:var(--green);color:#fff;border-radius:5px;border:none;"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-sm" title="Timeline" style="padding:3px 7px;font-size:0.7rem;background:var(--gold);color:var(--navy);border-radius:5px;border:none;"><i class="fas fa-stream"></i></button>
+          <button class="btn btn-sm" title="Print" style="padding:3px 7px;font-size:0.7rem;background:#6B7280;color:#fff;border-radius:5px;border:none;"><i class="fas fa-print"></i></button>
+        </div>
+      </td>
+    </tr>`;
+  });
+
+  $('#quotationTable').DataTable({
+    pageLength: 10,
+    dom: '<"d-flex justify-content-between align-items-center mb-3"lBf>rt<"d-flex justify-content-between mt-3"ip>',
+    buttons: ['excel','csv','print'],
+    responsive: true,
+    language: { search: '<i class="fas fa-search me-1"></i>', searchPlaceholder: 'Search quotations...' }
+  });
+
+  // Populate timeline select
+  const tSel = document.getElementById('timelineQuotSelect');
+  quotations.forEach(q => {
+    const o = document.createElement('option');
+    o.value = q.qno; o.textContent = `${q.qno} – ${q.customer}`;
+    tSel.appendChild(o);
+  });
+  renderTimeline();
+  renderCharts();
+  renderAutoFlow();
+  renderNotifications();
+  animateCounters();
+});
+
+// ── TIMELINE DATA ──
+const timelineData = {
+  'QT-2026-0001': [
+    {date:'10 Jun 2026',title:'Enquiry Submitted',note:'Customer submitted online enquiry for Toyota Hilux spare parts.',next:'12 Jun 2026',type:'submitted',mode:'Portal',by:'System',priority:'High'},
+    {date:'12 Jun 2026',title:'ERP Validation Completed',note:'Customer master and product master matched. Quotation auto-generated by ERP.',next:'14 Jun 2026',type:'review',mode:'Portal',by:'ERP System',priority:'High'},
+    {date:'14 Jun 2026',title:'Proposal Sent to Customer',note:'Quotation PDF emailed to Ahmed Hassan. Follow-up scheduled.',next:'17 Jun 2026',type:'submitted',mode:'Email',by:'James Mwamba',priority:'High'},
+    {date:'17 Jun 2026',title:'Client Reviewed — Price Query',note:'Customer requested 5% discount on total order. Commercial discussion initiated.',next:'19 Jun 2026',type:'review',mode:'Phone',by:'James Mwamba',priority:'Medium'},
+    {date:'19 Jun 2026',title:'Negotiation Completed',note:'Management approved 3% discount. Revised proposal sent.',next:'22 Jun 2026',type:'discussion',mode:'Meeting',by:'James Mwamba',priority:'High'},
+    {date:'22 Jun 2026',title:'Go Ahead Received',note:'Customer confirmed order. Sales Order preparation initiated.',next:'25 Jun 2026',type:'approved',mode:'WhatsApp',by:'Ahmed Hassan',priority:'High'}
+  ],
+  'QT-2026-0002': [
+    {date:'08 Jun 2026',title:'Enquiry Submitted',note:'Kilimanjaro Mining requested CAT 730E dump truck parts.',next:'10 Jun 2026',type:'submitted',mode:'Portal',by:'System',priority:'High'},
+    {date:'10 Jun 2026',title:'Technical Discussion',note:'Engineering team reviewed specs. Parts confirmed available.',next:'12 Jun 2026',type:'discussion',mode:'Meeting',by:'Sarah Njoroge',priority:'High'},
+    {date:'12 Jun 2026',title:'Proposal Submitted',note:'Quotation for TZS 42M sent. Awaiting customer review.',next:'15 Jun 2026',type:'submitted',mode:'Email',by:'Sarah Njoroge',priority:'Medium'},
+    {date:'15 Jun 2026',title:'Client Reviewing',note:'Customer acknowledged receipt. Board review in progress.',next:'18 Jun 2026',type:'review',mode:'Phone',by:'Sarah Njoroge',priority:'Medium'}
+  ]
+};
+
+function renderTimeline() {
+  const qno = document.getElementById('timelineQuotSelect').value;
+  const wrap = document.getElementById('timelineWrap');
+  const data = timelineData[qno] || timelineData['QT-2026-0001'];
+  const typeMap = { submitted:'#1D4ED8', review:'#D97706', discussion:'#7C3AED', approved:'#059669', rejected:'#DC2626' };
+  const iconMap = { submitted:'fa-paper-plane', review:'fa-eye', discussion:'fa-comments', approved:'fa-check', rejected:'fa-times' };
+  wrap.innerHTML = data.map(t => {
+    const chipBg = t.priority==='High' ? 'rgba(220,38,38,0.1)' : (t.priority==='Medium' ? 'rgba(245,158,11,0.1)' : 'rgba(16,185,129,0.1)');
+    const chipCol = t.priority==='High' ? '#DC2626' : (t.priority==='Medium' ? '#D97706' : '#059669');
+    const nextHtml = t.next ? '<div class="tl-next"><i class="fas fa-arrow-right me-1"></i>Next Follow-up: ' + t.next + '</div>' : '';
+    return `
+    <div class="tl-item">
+      <div class="tl-dot" style="background:${typeMap[t.type]}20;border-color:${typeMap[t.type]};">
+        <i class="fas ${iconMap[t.type]}" style="color:${typeMap[t.type]};font-size:0.9rem;"></i>
+      </div>
+      <div class="tl-card ${t.type}">
+        <div class="tl-date"><i class="fas fa-calendar-alt me-1" style="color:var(--gold);"></i>${t.date}</div>
+        <div class="tl-title">${t.title}</div>
+        <div class="tl-note">${t.note}</div>
+        <div class="tl-meta">
+          <span class="tl-chip"><i class="fas fa-user me-1"></i>${t.by}</span>
+          <span class="tl-chip"><i class="fas fa-phone me-1"></i>${t.mode}</span>
+          <span class="tl-chip" style="background:${chipBg};color:${chipCol};">${t.priority}</span>
+        </div>
+        ${nextHtml}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let followupExtra = {};
+function addFollowup() {
+  const qno = document.getElementById('timelineQuotSelect').value;
+  const d = document.getElementById('fu_date').value;
+  const by = document.getElementById('fu_by').value || 'Sales Executive';
+  const mode = document.getElementById('fu_mode').value;
+  const status = document.getElementById('fu_status').value;
+  const remarks = document.getElementById('fu_remarks').value || 'Follow-up completed.';
+  const next = document.getElementById('fu_next').value;
+  const priority = document.getElementById('fu_priority').value;
+  if (!d) { alert('Please select a follow-up date.'); return; }
+  if (!followupExtra[qno]) followupExtra[qno] = [];
+  const typeMap2 = { 'Proposal Submitted':'submitted','Client Reviewing':'review','Technical Discussion':'discussion','Commercial Discussion':'discussion','Price Negotiation':'discussion','Waiting Client Approval':'review','Go Ahead Received':'approved','Rejected':'rejected','Sales Order Created':'approved' };
+  followupExtra[qno].push({
+    date: d ? new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : 'Today',
+    title: status, note: remarks, next: next ? new Date(next).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '',
+    type: typeMap2[status] || 'review', mode, by, priority
+  });
+  const current = timelineData[qno] || timelineData['QT-2026-0001'];
+  timelineData[qno] = [...current, ...followupExtra[qno]];
+  renderTimeline();
+  document.getElementById('fu_remarks').value='';
+}
+
+// ── CHARTS ──
+function renderCharts() {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const c1 = document.getElementById('lineChart').getContext('2d');
+  new Chart(c1, { type:'line', data: {
+    labels: months,
+    datasets: [
+      { label:'Enquiries', data:[18,24,20,30,26,35,28,38,32,40,36,42], borderColor:'#003366', backgroundColor:'rgba(0,51,102,0.07)', tension:0.4, pointRadius:4, pointBackgroundColor:'#003366' },
+      { label:'Quotations', data:[12,18,15,22,19,27,21,30,24,32,28,34], borderColor:'#007B5E', backgroundColor:'rgba(0,123,94,0.07)', tension:0.4, pointRadius:4, pointBackgroundColor:'#007B5E' },
+      { label:'Sales Orders', data:[6,10,8,13,11,16,13,19,15,20,18,22], borderColor:'#F4B400', backgroundColor:'rgba(244,180,0,0.07)', tension:0.4, pointRadius:4, pointBackgroundColor:'#F4B400' }
+    ]
+  }, options:{ responsive:true, plugins:{ legend:{labels:{font:{family:'Poppins',size:11}}} }, scales:{ y:{beginAtZero:true, grid:{color:'rgba(0,0,0,0.04)'} } } } });
+
+  new Chart(document.getElementById('pieChart').getContext('2d'), { type:'doughnut', data:{
+    labels:['Approved','Proposal Sent','Client Review','Pending','Rejected','Converted SO'],
+    datasets:[{ data:[97,36,28,34,22,64], backgroundColor:['#007B5E','#0891B2','#CA8A04','#D97706','#DC2626','#065F46'], borderWidth:2, borderColor:'#fff' }]
+  }, options:{ responsive:true, cutout:'65%', plugins:{ legend:{position:'bottom',labels:{font:{family:'Poppins',size:10},padding:8}} } } });
+
+  new Chart(document.getElementById('barChart').getContext('2d'), { type:'bar', data:{
+    labels: months,
+    datasets:[{ label:'Proposal Value (TZS M)', data:[180,240,195,320,265,380,295,410,340,450,390,480], backgroundColor: months.map((_,i)=>i<6?'rgba(0,51,102,0.8)':'rgba(0,123,94,0.8)'), borderRadius:6 }]
+  }, options:{ responsive:true, plugins:{ legend:{labels:{font:{family:'Poppins',size:11}}} }, scales:{ y:{beginAtZero:true, grid:{color:'rgba(0,0,0,0.04)'} } } } });
+
+  new Chart(document.getElementById('industryChart').getContext('2d'), { type:'bar', data:{
+    labels:['Mining','Construction','Transport','Agriculture','Energy','Maritime'],
+    datasets:[{ label:'Enquiries', data:[72,58,45,32,24,17], backgroundColor:['#003366','#007B5E','#F4B400','#0891B2','#7C3AED','#D97706'], borderRadius:6 }]
+  }, options:{ responsive:true, indexAxis:'y', plugins:{ legend:{display:false} }, scales:{ x:{beginAtZero:true, grid:{color:'rgba(0,0,0,0.04)'} } } } });
+
+  new Chart(document.getElementById('vehicleChart').getContext('2d'), { type:'bar', data:{
+    labels:['Toyota','Isuzu','CAT','Volvo','Komatsu','Scania','Mitsubishi'],
+    datasets:[{ label:'Orders', data:[88,64,54,42,36,28,20], backgroundColor:'rgba(0,51,102,0.75)', borderRadius:6 }]
+  }, options:{ responsive:true, plugins:{ legend:{display:false} }, scales:{ y:{beginAtZero:true, grid:{color:'rgba(0,0,0,0.04)'} } } } });
+
+  new Chart(document.getElementById('execChart').getContext('2d'), { type:'bar', data:{
+    labels: salesExecs,
+    datasets:[{ label:'Proposals', data:[48,42,38,34,21], backgroundColor:['#003366','#007B5E','#F4B400','#0891B2','#7C3AED'], borderRadius:6 }]
+  }, options:{ responsive:true, plugins:{ legend:{display:false} }, scales:{ y:{beginAtZero:true, grid:{color:'rgba(0,0,0,0.04)'} } } } });
+}
+
+// ── AUTOMATION FLOW ──
+const autoSteps = [
+  { icon:'fa-globe', title:'Website Enquiry', desc:'Customer submits form via portal or API integration from external website.' },
+  { icon:'fa-plug', title:'Auto API Integration', desc:'Webhook triggers ERP API. Enquiry data validated and stored in real-time.' },
+  { icon:'fa-user-check', title:'Customer Master Validation', desc:'ERP checks if customer exists. Auto-creates new customer record if required.' },
+  { icon:'fa-boxes', title:'Product Master Matching', desc:'OEM part numbers cross-referenced against ERP product catalog.' },
+  { icon:'fa-tags', title:'Price List Selection', desc:'Valid price list selected based on customer type, volume, and region.' },
+  { icon:'fa-file-invoice', title:'Quotation Generation', desc:'ERP auto-generates formatted quotation PDF with taxes, terms, and validity.' },
+  { icon:'fa-shield-alt', title:'Management Approval', desc:'Workflow routes quotation to assigned approver. Auto-escalation on overdue.' },
+  { icon:'fa-envelope-open-text', title:'Email PDF to Customer', desc:'Approved quotation PDF auto-emailed with tracking pixel for read-receipt.' },
+  { icon:'fa-reply', title:'Customer Response', desc:'Customer accepts, rejects, or negotiates via portal or email response.' },
+  { icon:'fa-shopping-cart', title:'Sales Order Generation', desc:'On acceptance, Sales Order auto-created in ERP. Inventory reserved.' }
+];
+function renderAutoFlow() {
+  document.getElementById('autoFlow').innerHTML = autoSteps.map(s => `
+    <div class="auto-step">
+      <div class="auto-dot"><i class="fas ${s.icon}"></i></div>
+      <div class="auto-content">
+        <h5>${s.title}</h5>
+        <p>${s.desc}</p>
+      </div>
+    </div>`).join('');
+}
+
+// ── NOTIFICATIONS ──
+const notifications = [
+  { icon:'fa-check-circle', color:'#059669', bg:'rgba(5,150,105,0.1)', text:'Proposal QT-2026-0005 approved by management', time:'2 minutes ago' },
+  { icon:'fa-eye', color:'#1D4ED8', bg:'rgba(29,78,216,0.1)', text:'Customer Baraka Industries viewed quotation QT-2026-0003', time:'18 minutes ago' },
+  { icon:'fa-clock', color:'#DC2626', bg:'rgba(220,38,38,0.1)', text:'Follow-up overdue: QT-2026-0008 — 2 days past due', time:'1 hour ago' },
+  { icon:'fa-exclamation-triangle', color:'#D97706', bg:'rgba(217,119,6,0.1)', text:'Quotation QT-2026-0011 expires in 3 days', time:'3 hours ago' },
+  { icon:'fa-thumbs-up', color:'#059669', bg:'rgba(5,150,105,0.1)', text:'Kilimanjaro Mining accepted proposal — Go Ahead received', time:'4 hours ago' },
+  { icon:'fa-user-plus', color:'#7C3AED', bg:'rgba(124,92,246,0.1)', text:'New customer registered: Zanzibar Fisheries Ltd.', time:'6 hours ago' },
+  { icon:'fa-redo', color:'#0891B2', bg:'rgba(8,145,178,0.1)', text:'Price revision requested by Mwanza Transport Ltd.', time:'Yesterday' }
+];
+function renderNotifications() {
+  document.getElementById('notifList').innerHTML = notifications.map(n => `
+    <div class="notif-item d-flex gap-3 align-items-start">
+      <div class="notif-icon" style="background:${n.bg};color:${n.color};"><i class="fas ${n.icon}"></i></div>
+      <div>
+        <div class="notif-text">${n.text}</div>
+        <div class="notif-time"><i class="fas fa-clock me-1"></i>${n.time}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── NOTIFICATION TOGGLE ──
+function toggleNotif() {
+  document.getElementById('notifPanel').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('notifPanel');
+  const btn = document.querySelector('.notif-btn');
+  if (!panel.contains(e.target) && !btn.contains(e.target)) panel.classList.remove('open');
+});
+
+// ── TAB SWITCH ──
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('d-none'));
+  document.querySelectorAll('.portal-tabs .nav-link').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.remove('d-none');
+  btn.classList.add('active');
+}
+
+// ── COUNTER ANIMATION ──
+function animateCounters() {
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = parseInt(el.dataset.count);
+    let current = 0;
+    const step = Math.ceil(target / 60);
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = current;
+      if (current >= target) clearInterval(timer);
+    }, 24);
+  });
+}
+
+// ── SIDEBAR ──
+let sidebarOpen = true;
+
+function toggleSidebar() {
+  const shell = document.getElementById('appShell');
+  sidebarOpen = !sidebarOpen;
+  if (sidebarOpen) {
+    shell.classList.remove('sidebar-collapsed');
+    document.getElementById('sidebarToggleIcon').className = 'fas fa-chevron-left';
+  } else {
+    shell.classList.add('sidebar-collapsed');
+    document.getElementById('sidebarToggleIcon').className = 'fas fa-chevron-right';
+  }
+  // Keep toggle button positioned correctly
+  const btn = document.getElementById('sidebarToggleBtn');
+  if (sidebarOpen) {
+    btn.style.left = '260px';
+  } else {
+    btn.style.left = '8px';
+  }
+}
+
+function showPage(pageId) {
+  // Hide all pages
+  document.querySelectorAll('.menu-page').forEach(p => p.classList.remove('active'));
+  // Deactivate all nav links
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  // Show target page
+  const page = document.getElementById('page-' + pageId);
+  if (page) page.classList.add('active');
+  // Activate nav item
+  const nav = document.getElementById('nav-' + pageId);
+  if (nav) nav.classList.add('active');
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // On mobile, close sidebar after navigation
+  if (window.innerWidth < 992) {
+    document.getElementById('appShell').classList.add('sidebar-collapsed');
+    document.getElementById('sidebarToggleIcon').className = 'fas fa-chevron-right';
+    document.getElementById('sidebarToggleBtn').style.left = '8px';
+    sidebarOpen = false;
+  }
+}
+
+// Set Home as active by default on load
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('nav-home').classList.add('active');
+  // Responsive: collapse sidebar on small screens by default
+  if (window.innerWidth < 992) {
+    document.getElementById('appShell').classList.add('sidebar-collapsed');
+    document.getElementById('sidebarToggleBtn').style.left = '8px';
+    document.getElementById('sidebarToggleIcon').className = 'fas fa-chevron-right';
+    sidebarOpen = false;
+  }
+});
+
+// ── SAFARI IMAGE FALLBACK CHAIN ──
+(function() {
+  // Real safari vehicle images from Rajinder Africa (Tanzania)
+  const safariImgs = [
+    'https://rajinderafrica.com/wp-content/uploads/2016/02/cruiserexplorer5x.jpeg',
+    'https://rajinderafrica.com/wp-content/uploads/2016/02/CruiserOpenGameDrive.jpeg',
+    'https://rajinderafrica.com/wp-content/uploads/2016/02/cruiserexplorer7x.jpeg',
+    'https://rajinderafrica.com/wp-content/uploads/2016/02/safaricruiserhardtop7x.jpeg',
+    'https://rajinderafrica.com/wp-content/uploads/2016/02/cruiserexplorer5xe.jpeg'
+  ];
+  let idx = 0;
+  const img = document.getElementById('safariHeroImg');
+  if (!img) return;
+  img.onerror = function() {
+    idx++;
+    if (idx < safariImgs.length) {
+      img.src = safariImgs[idx];
+    }
+  };
+  img.src = safariImgs[0];
+})();
+</script>
+</body>
+</html>
