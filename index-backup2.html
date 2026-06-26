@@ -2252,8 +2252,8 @@ const quotations = Array.from({length:15}, (_,i) => {
     amount: amounts[i].toLocaleString(),
     stage: stages[stI], stageIdx: stI,
     nfDate: nf.toLocaleDateString('en-GB'),
-    mgmt: i === 0 ? 'Pending' : ['Approved','Pending','Under Review','Escalated'][i%4],
-    decision: i === 0 ? 'Pending' : ['Accepted','Pending','Negotiating','Declined','Waiting'][i%5]
+    mgmt: ['Approved','Pending','Under Review','Escalated'][i%4],
+    decision: ['Accepted','Pending','Negotiating','Declined','Waiting'][i%5]
   };
 });
 
